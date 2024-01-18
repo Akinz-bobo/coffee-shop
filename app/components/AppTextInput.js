@@ -1,9 +1,16 @@
-import { StyleSheet, Text, TextInput, View } from "react-native"
+import { StyleSheet, TextInput, View } from "react-native"
 import React from "react"
 import { EvilIcons } from "@expo/vector-icons"
 import colors from "../utils/colors"
 
-export default function AppTextInput() {
+export default function AppTextInput({ onChange }) {
+  const handleChange = ({ nativeEvent: { text } }) => {
+    if (text) {
+      onChange(true)
+    } else {
+      onChange(false)
+    }
+  }
   return (
     <View style={styles.constainer}>
       <EvilIcons
@@ -16,6 +23,7 @@ export default function AppTextInput() {
         placeholder="Find Your Coffee..."
         style={styles.input}
         placeholderTextColor={colors.light}
+        onChange={handleChange}
       />
     </View>
   )

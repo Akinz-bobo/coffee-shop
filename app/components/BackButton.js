@@ -21,9 +21,9 @@ export default function BackButton({ onPress }) {
 
 const styles = StyleSheet.create({
   button: {
-    padding: 8,
-    paddingLeft: 15,
-    paddingRight: 15,
+    padding: 6,
+    paddingLeft: 10,
+    paddingRight: 10,
     borderRadius: 10,
   },
 })

@@ -1,4 +1,10 @@
-import { FlatList, StyleSheet, Text, View } from "react-native"
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native"
 import React from "react"
 import colors from "../utils/colors"
 
@@ -10,9 +16,13 @@ export default function ListRenderer({ data }) {
         data={data}
         keyExtractor={data => data.id}
         renderItem={({ item }) => (
-          <View>
+          <TouchableOpacity
+            onPress={() => {
+              console.log(item)
+            }}
+          >
             <Text style={styles.text}>{item.title}</Text>
-          </View>
+          </TouchableOpacity>
         )}
       />
     </View>
@@ -28,6 +38,6 @@ const styles = StyleSheet.create({
   text: {
     color: colors.white,
     fontSize: 20,
-    marginTop: 20,
+    marginTop: 15,
   },
 })
