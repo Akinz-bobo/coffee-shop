@@ -6,12 +6,16 @@ import {
   Text,
   View,
 } from "react-native"
-import React from "react"
+import React, { useState } from "react"
 import Screen from "../components/Screen"
 import colors from "../utils/colors"
 import AppTextInput from "../components/AppTextInput"
 import Filter from "../components/Filter"
 import GradientCard from "../components/GradientCard"
+import GradientWrapper from "../components/GradientWrapper"
+import ListRenderer from "../components/ListRenderer"
+import Logo from "../components/Logo"
+import AppText from "../components/AppText"
 
 const origins = [
   {
@@ -87,51 +91,72 @@ const shops = [
   },
 ]
 
+const suggestion = [
+  { title: "Rwanda", id: 1 },
+  { title: "Burundi", id: 2 },
+  { title: "Rwanda", id: 3 },
+  { title: "Ethiopia", id: 4 },
+  { title: "Congo", id: 5 },
+  { title: "Tanzania", id: 6 },
+  { title: "Uganda", id: 7 },
+  { title: "Kenya", id: 8 },
+]
 export default function HomeScreen() {
+  const [modalVisible, setModalVisible] = useState()
   return (
     <ScrollView>
       <Screen style={styles.container}>
-        <View style={styles.logoContainter}>
-          <Image source={require("../assets/logo.jpg")} style={styles.logo} />
-        </View>
-        <Text style={styles.text}>Find the best coffee for you</Text>
-        <AppTextInput />
-        <Filter />
-        <View>
-          <FlatList
-            horizontal
-            data={origins}
-            keyExtractor={data => data.id.toString()}
-            renderItem={({ item }) => (
-              <GradientCard
-                image={item.image}
-                title={item.title}
-                decription={item.description}
-                origin={item.origin}
-                onPress={() => console.log("Item selected: ", item)}
+        <Logo />
+        <AppText title="Find the best coffee for you" variant="bold" />
+        <AppTextInput onChange={setModalVisible} />
+
+        <View style={styles.textInputContainer}>
+          <Filter />
+
+          {modalVisible && (
+            <GradientWrapper modalVisible={modalVisible}>
+              <ListRenderer data={suggestion} />
+            </GradientWrapper>
+          )}
+
+          {!modalVisible && (
+            <View>
+              <FlatList
+                horizontal
+                data={origins}
+                keyExtractor={data => data.id.toString()}
+                renderItem={({ item }) => (
+                  <GradientCard
+                    image={item.image}
+                    title={item.title}
+                    decription={item.description}
+                    origin={item.origin}
+                    onPress={() => console.log("Item selected: ", item)}
+                  />
+                )}
               />
-            )}
-          />
-        </View>
-        <View>
-          <FlatList
-            horizontal
-            data={shops}
-            keyExtractor={data => data.id.toString()}
-            renderItem={({ item }) => (
-              <GradientCard
-                distance={item.distance}
-                totalRatings={item.totalRatings}
-                decription={item.description}
-                image={item.image}
-                origin={item.origin}
-                stars={item.stars}
-                title={item.title}
-                icon={item.icon}
-                onPress={() => console.log("Item selected: ", item)}
-              />
-            )}
-          />
+            </View>
+          )}
+          <View>
+            <FlatList
+              horizontal
+              data={shops}
+              keyExtractor={data => data.id.toString()}
+              renderItem={({ item }) => (
+                <GradientCard
+                  distance={item.distance}
+                  totalRatings={item.totalRatings}
+                  decription={item.description}
+                  image={item.image}
+                  origin={item.origin}
+                  stars={item.stars}
+                  title={item.title}
+                  icon={item.icon}
+                  onPress={() => console.log("Item selected: ", item)}
+                />
+              )}
+            />
+          </View>
         </View>
       </Screen>
     </ScrollView>
@@ -142,20 +167,14 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 20,
   },
-  logo: {
-    height: 40,
-    width: 40,
-  },
-  logoContainter: {
-    width: "90%",
-    justifyContent: "flex-end",
-    flexDirection: "row",
-  },
-
   text: {
     color: colors.white,
     fontSize: 30,
     fontWeight: "700",
     width: "60%",
+  },
+  textInputContainer: {
+    flex: 1,
+    gap: 20,
   },
 })

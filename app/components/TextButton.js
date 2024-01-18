@@ -18,11 +18,12 @@ const styles = StyleSheet.create({
     paddingLeft: 30,
     paddingRight: 30,
     borderRadius: 15,
+    flex: 1,
     backgroundColor: colors.medium,
   },
   title: {
     textAlign: "center",
-    fontSize: 25,
+    fontSize: 20,
     color: colors.light,
   },
 })

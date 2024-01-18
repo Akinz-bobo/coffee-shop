@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.dark,
     paddingTop: Constants.statusBarHeight,
-    gap: 30,
+    gap: 20,
     paddingBottom: 60,
+    minHeight: "100%",
   },
 })
