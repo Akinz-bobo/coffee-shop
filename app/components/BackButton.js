@@ -3,8 +3,14 @@ import React from "react"
 import { AntDesign } from "@expo/vector-icons"
 import colors from "../utils/colors"
 import { LinearGradient } from "expo-linear-gradient"
+import { useNavigation } from "@react-navigation/native"
 
-export default function BackButton({ onPress }) {
+export default function BackButton() {
+  const navigation = useNavigation()
+
+  const handlePress = () => {
+    navigation.goBack()
+  }
   return (
     <LinearGradient
       colors={["rgba(38, 43, 51, 0.70)", "#252A32"]}
@@ -12,7 +18,7 @@ export default function BackButton({ onPress }) {
       start={{ x: 0.1, y: 0.2 }}
       style={styles.button}
     >
-      <TouchableOpacity onPress={onPress}>
+      <TouchableOpacity onPress={handlePress}>
         <AntDesign name="arrowleft" size={30} color={colors.light} />
       </TouchableOpacity>
     </LinearGradient>
@@ -22,8 +28,7 @@ export default function BackButton({ onPress }) {
 const styles = StyleSheet.create({
   button: {
     padding: 6,
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 15,
     borderRadius: 10,
   },
 })

@@ -25,7 +25,7 @@ const GradientCard = ({
 }) => {
   const [favorite, setFavorite] = useState(false)
   return (
-    <TouchableHighlight onPress={onPress} underlayColor={""}>
+    <TouchableHighlight onPress={onPress}>
       <LinearGradient
         colors={["rgba(38, 43, 51, 0.70)", "#252A32"]}
         locations={[0.4, 1]}

@@ -101,69 +101,74 @@ const suggestion = [
   { title: "Uganda", id: 7 },
   { title: "Kenya", id: 8 },
 ]
-export default function HomeScreen() {
+export default function HomeScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState()
   return (
-    <ScrollView>
-      <Screen style={styles.container}>
-        <Logo />
-        <AppText title="Find the best coffee for you" variant="bold" />
-        <AppTextInput onChange={setModalVisible} />
+    <Screen style={styles.container}>
+      <ScrollView>
+        <View style={styles.screen}>
+          <Logo />
+          <AppText title="Find the best coffee for you" variant="bold" />
+          <AppTextInput onChange={setModalVisible} />
 
-        <View style={styles.textInputContainer}>
-          <Filter />
+          <View style={styles.textInputContainer}>
+            <Filter />
 
-          {modalVisible && (
-            <GradientWrapper modalVisible={modalVisible}>
-              <ListRenderer data={suggestion} />
-            </GradientWrapper>
-          )}
+            {modalVisible && (
+              <GradientWrapper modalVisible={modalVisible}>
+                <ListRenderer data={suggestion} />
+              </GradientWrapper>
+            )}
 
-          {!modalVisible && (
+            {!modalVisible && (
+              <View>
+                <FlatList
+                  horizontal
+                  data={origins}
+                  keyExtractor={data => data.id.toString()}
+                  renderItem={({ item }) => (
+                    <GradientCard
+                      image={item.image}
+                      title={item.title}
+                      decription={item.description}
+                      origin={item.origin}
+                      onPress={() => navigation.navigate("Origin", item)}
+                    />
+                  )}
+                />
+              </View>
+            )}
             <View>
               <FlatList
                 horizontal
-                data={origins}
+                data={shops}
                 keyExtractor={data => data.id.toString()}
                 renderItem={({ item }) => (
                   <GradientCard
-                    image={item.image}
-                    title={item.title}
+                    distance={item.distance}
+                    totalRatings={item.totalRatings}
                     decription={item.description}
+                    image={item.image}
                     origin={item.origin}
-                    onPress={() => console.log("Item selected: ", item)}
+                    stars={item.stars}
+                    title={item.title}
+                    icon={item.icon}
+                    onPress={() => navigation.navigate("Shop", item)}
                   />
                 )}
               />
             </View>
-          )}
-          <View>
-            <FlatList
-              horizontal
-              data={shops}
-              keyExtractor={data => data.id.toString()}
-              renderItem={({ item }) => (
-                <GradientCard
-                  distance={item.distance}
-                  totalRatings={item.totalRatings}
-                  decription={item.description}
-                  image={item.image}
-                  origin={item.origin}
-                  stars={item.stars}
-                  title={item.title}
-                  icon={item.icon}
-                  onPress={() => console.log("Item selected: ", item)}
-                />
-              )}
-            />
           </View>
         </View>
-      </Screen>
-    </ScrollView>
+      </ScrollView>
+    </Screen>
   )
 }
 
 const styles = StyleSheet.create({
+  screen: {
+    gap: 20,
+  },
   container: {
     paddingLeft: 20,
   },

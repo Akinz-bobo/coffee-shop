@@ -7,16 +7,17 @@ import colors from "../utils/colors"
 
 export default function IconButton({ icon, onPress, color }) {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <AntDesign name={icon} size={30} color={color ? color : colors.light} />
-    </TouchableOpacity>
+    <View style={styles.button}>
+      <TouchableOpacity onPress={onPress}>
+        <AntDesign name={icon} size={30} color={color ? color : colors.light} />
+      </TouchableOpacity>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
   button: {
-    paddingLeft: 15,
-    paddingRight: 15,
+    padding: 15,
     borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",

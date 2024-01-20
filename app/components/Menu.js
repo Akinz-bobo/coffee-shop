@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     borderBottomColor: colors.light,
-    // borderBottomWidth: "1px",
     borderBottomWidth: 1,
     borderStyle: "dashed",
   },
