@@ -4,10 +4,33 @@ import React from "react"
 
 import colors from "../utils/colors"
 
-export default function TextButton({ title, onPress }) {
+export default function TextButton({
+  title,
+  onPress,
+  background,
+  style,
+  active,
+}) {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.title}>{title}</Text>
+    <TouchableOpacity
+      style={[
+        styles.button,
+        {
+          backgroundColor: background ? colors[background] : colors.medium,
+          borderWidth: active ? 1 : 0,
+        },
+      ]}
+      onPress={onPress}
+    >
+      <Text
+        style={[
+          styles.title,
+          style,
+          { color: active ? colors.primary : colors.white },
+        ]}
+      >
+        {title}
+      </Text>
     </TouchableOpacity>
   )
 }
@@ -15,11 +38,14 @@ export default function TextButton({ title, onPress }) {
 const styles = StyleSheet.create({
   button: {
     padding: 15,
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingLeft: 20,
+    paddingRight: 20,
     borderRadius: 15,
-    flex: 1,
-    backgroundColor: colors.medium,
+    borderWidth: 1,
+    borderTopColor: colors.primary,
+    borderStartColor: colors.primary,
+    borderBottomColor: colors.primary,
+    borderEndColor: colors.primary,
   },
   title: {
     textAlign: "center",
