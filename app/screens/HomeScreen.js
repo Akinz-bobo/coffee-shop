@@ -6,7 +6,7 @@ import {
   Text,
   View,
 } from "react-native"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Screen from "../components/Screen"
 import colors from "../utils/colors"
 import AppTextInput from "../components/AppTextInput"
@@ -16,7 +16,7 @@ import GradientWrapper from "../components/GradientWrapper"
 import ListRenderer from "../components/ListRenderer"
 import Logo from "../components/Logo"
 import AppText from "../components/AppText"
-
+import useFetch from "../hooks/useFetch"
 const origins = [
   {
     id: 1,
@@ -102,6 +102,16 @@ const suggestion = [
   { title: "Kenya", id: 8 },
 ]
 export default function HomeScreen({ navigation }) {
+  const [shopData, setShopData] = useState([])
+  const { getShops } = useFetch()
+  async function fetchShops() {
+    const shops = await getShops()
+    setShopData({ ...shops })
+  }
+  useEffect(() => {
+    fetchShops()
+  }, [])
+  console.log(shopData)
   const [modalVisible, setModalVisible] = useState()
   return (
     <Screen style={styles.container}>

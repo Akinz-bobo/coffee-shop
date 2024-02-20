@@ -74,7 +74,7 @@ const GradientCard = ({
                   <FontAwesome
                     name={icon}
                     size={24}
-                    color={favorite ? colors.red : colors.white}
+                    color={favorite ? colors.primary : colors.white}
                   />
                 </TouchableOpacity>
               </LinearGradient>
@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     marginTop: 10,
+    fontWeight: "bold",
   },
   origin: {
     color: "white",
