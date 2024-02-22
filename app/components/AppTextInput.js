@@ -3,14 +3,33 @@ import React from "react"
 import { EvilIcons } from "@expo/vector-icons"
 import colors from "../utils/colors"
 
-export default function AppTextInput({ onChange }) {
-  const handleChange = ({ nativeEvent: { text } }) => {
-    if (text) {
-      onChange(true)
-    } else {
-      onChange(false)
+export default function AppTextInput({ onChange, searchText }) {
+  // const handleChange = ({ nativeEvent: { text } }) => {
+  //   if (text) {
+  //     onChange(true)
+  //   } else {
+  //     onChange(false)
+  //   }
+  // }
+
+  // Debounce function
+  const debounce = (func, delay) => {
+    let timeoutId
+    return function () {
+      const context = this
+      const args = arguments
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        func.apply(context, args)
+      }, delay)
     }
   }
+
+  // Function to handle the debounced search
+  const handleDebouncedSearch = debounce(text => {
+    onChange(text)
+  }, 300)
+
   return (
     <View style={styles.constainer}>
       <EvilIcons
@@ -23,7 +42,8 @@ export default function AppTextInput({ onChange }) {
         placeholder="Find Your Coffee..."
         style={styles.input}
         placeholderTextColor={colors.light}
-        onChange={handleChange}
+        onChangeText={text => handleDebouncedSearch(text)}
+        value={searchText}
       />
     </View>
   )

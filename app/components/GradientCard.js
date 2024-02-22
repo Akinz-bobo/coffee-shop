@@ -22,22 +22,19 @@ const GradientCard = ({
   totalRatings,
   icon,
   onPress,
+  style,
 }) => {
   const [favorite, setFavorite] = useState(false)
-  // useEffect(()=>{
-  //   console.log({ stars,
-  //     totalRatings,})
-  // },[])
   return (
     <TouchableHighlight onPress={onPress}>
       <LinearGradient
         colors={["rgba(38, 43, 51, 0.70)", "#252A32"]}
         locations={[0.4, 1]}
         start={{ x: 0.1, y: 0.2 }}
-        style={styles.card}
+        style={[styles.card, style]}
       >
         <View>
-          <Image source={{uri:image}} style={styles.image} />
+          <Image source={{ uri: image }} style={styles.image} />
           <Text style={styles.title}>{title}</Text>
           <View style={styles.details}>
             {origin && (
@@ -51,12 +48,6 @@ const GradientCard = ({
 
             {distance && (
               <View style={styles.detail}>
-                {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
-                  <Text style={{ color: "white", marginRight: 2 }}>
-                    {distance}
-                  </Text>
-                  <Text style={{ color: "#D17842" }}>KM</Text>
-                </View> */}
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Text style={{ color: "white", marginRight: 2 }}>
                     {stars > 5 ? 5 : stars}
@@ -96,7 +87,7 @@ const styles = StyleSheet.create({
   card: {
     borderRadius: 20,
     height: 300,
-    width: 200,
+    width: 185,
     padding: 20,
     alignItems: "center",
     marginRight: 15,
@@ -105,7 +96,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 20,
     alignItems: "center",
-    marginTop: 10,
   },
   detail: {
     flex: 1,
@@ -121,11 +111,11 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     flex: 1,
     width: 160,
-    height: "auto",
+    minHeight: 150,
   },
 
   title: {
-    fontSize: 20,
+    fontSize: 18,
     color: "white",
     marginTop: 10,
   },

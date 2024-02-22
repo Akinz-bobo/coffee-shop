@@ -4,7 +4,7 @@ import FilterItem from "./FilterItem"
 
 export default function Filter() {
   const [activeIndex, setActiveIndex] = useState(0)
-  const tabs = ["All", "Origin", "History", "Favorite"]
+  const tabs = ["All", "Origin", "Favorite", "Special"]
   const pressHandler = index => {
     setActiveIndex(index)
   }

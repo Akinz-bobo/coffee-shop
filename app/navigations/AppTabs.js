@@ -30,7 +30,6 @@ export default AppTabs = () => {
           } else if (route.name === "Favorites") {
             iconName = focused ? "heart" : "heart-o"
           }
-          // You can return any component that you like here!
           return <FontAwesome name={iconName} size={size} color={color} />
         },
       })}
