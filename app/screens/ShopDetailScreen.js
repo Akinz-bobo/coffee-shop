@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native"
+import { ScrollView, StyleSheet, TouchableOpacity, View,Linking } from "react-native"
 import React from "react"
 import Screen from "../components/Screen"
 import Logo from "../components/Logo"
@@ -9,42 +9,53 @@ import colors from "../utils/colors"
 import Gallery from "../components/Gallery"
 import { AntDesign } from "@expo/vector-icons"
 import Menu from "../components/Menu"
+import { useFavouritesStore } from "../hooks/localStorage"
+// import { togglFavouriteStore } from "../utils/storageFunctions"
+// import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ShopDetailScreen({ route }) {
   const shop = route.params
-  console.log(shop)
+  const {fav,toggleFavouriteStore} = useFavouritesStore(shop._id)
+  // console.log(shop)
   return (
     <Screen style={styles.screen}>
       <ScrollView>
         <View style={{ gap: 20 }}>
           <Logo icon={true} />
           <View style={{ marginTop: 10 }}>
-            <AppText title="ÖSS Kaffe" variant="bold" />
+            <AppText title={shop.shop_name} variant="bold" />
             <View style={styles.textContainer}>
-              <AppText title="1234.5 KM" style={styles.text} color={true} />
-              <AppText title="Closes at 23:00" style={styles.text} />
+              <AppText title={`Open at ${shop.opening_hour}`} style={styles.text} color={true} />
+              <AppText title={`Closes at ${shop.closing_hour}`} style={styles.text} />
             </View>
           </View>
           <View style={styles.btnContainer}>
             <TextButton title="Direction" />
-            <IconButton icon="heart" />
-            <IconButton icon="sharealt" />
+            <TouchableOpacity onPress={ e=>{
+         toggleFavouriteStore(JSON.stringify(shop))
+            }}>
+            <IconButton  color={fav && "red"} icon="heart" />
+            </TouchableOpacity>
+            {/* <IconButton icon="sharealt" /> */}
           </View>
           <View style={styles.description}>
             <AppText
-              title="Deep within the challenges we face, lies the fertile ground for groundbreaking business ideas to blossom and thrive"
+              title={shop.description}
+              // title="Deep within the challenges we face, lies the fertile ground for groundbreaking business ideas to blossom and thrive"
               style={{ fontSize: 14 }}
             />
           </View>
-          <Gallery />
-          <View style={styles.container}>
+          <Gallery cover_image={shop.cover_image[0]} 
+          image1={shop.images[0]} image2={shop.images[1]} />
+          
+          {shop.hasOwnProperty("social_link") ?<View style={styles.container}>
             <AppText title="Instagram" color={true} />
-            <TouchableOpacity style={styles.title}>
-              <AppText title="ÖSS Kaffe" color={true} />
+            <TouchableOpacity onPress={async e=>Linking.openURL(shop.social_link)} style={styles.title}>
+              <AppText title={shop.shop_name} color={true} />
               <AntDesign name="instagram" size={24} color={colors.primary} />
             </TouchableOpacity>
-          </View>
-          <Menu />
+          </View>:null}
+          <Menu menu={shop.menu} />
         </View>
       </ScrollView>
     </Screen>
