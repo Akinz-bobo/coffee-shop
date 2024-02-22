@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { LinearGradient } from "expo-linear-gradient"
 import { FontAwesome } from "@expo/vector-icons"
 import Ratings from "./Ratings"
@@ -24,6 +24,10 @@ const GradientCard = ({
   onPress,
 }) => {
   const [favorite, setFavorite] = useState(false)
+  // useEffect(()=>{
+  //   console.log({ stars,
+  //     totalRatings,})
+  // },[])
   return (
     <TouchableHighlight onPress={onPress}>
       <LinearGradient
@@ -33,7 +37,7 @@ const GradientCard = ({
         style={styles.card}
       >
         <View>
-          <Image source={image} style={styles.image} />
+          <Image source={{uri:image}} style={styles.image} />
           <Text style={styles.title}>{title}</Text>
           <View style={styles.details}>
             {origin && (
@@ -47,12 +51,12 @@ const GradientCard = ({
 
             {distance && (
               <View style={styles.detail}>
-                <View style={{ flexDirection: "row", alignItems: "center" }}>
+                {/* <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Text style={{ color: "white", marginRight: 2 }}>
                     {distance}
                   </Text>
                   <Text style={{ color: "#D17842" }}>KM</Text>
-                </View>
+                </View> */}
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Text style={{ color: "white", marginRight: 2 }}>
                     {stars > 5 ? 5 : stars}

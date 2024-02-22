@@ -28,7 +28,8 @@ export default function OriginDetailScreen({ route }) {
   
   */
   console.log("OriginDetailScreen:", item)
-  const image = require("../assets/img2.png")
+  // const image = require("../assets/img2.png")
+  const image = item.cover_image[0]
   const sizes = ["250gm", "500gm", "1000gm"]
   const [active, setActive] = useState(null)
   const onPress = index => {
@@ -41,25 +42,23 @@ export default function OriginDetailScreen({ route }) {
           <ImageBackground
             esizeMode="cover"
             style={styles.image}
-            source={image}
+            source={{uri:image}}
           >
             <IconsGroup />
-            <Glass />
+            <Glass ratings={5} origin={item.origin} title={`${item.origin}'s Beans`}/>
           </ImageBackground>
           <View style={styles.footer}>
             <View style={styles.description}>
               <AppText title="Description" style={{ fontSize: 20 }} />
               <AppText
-                title="Rwanda has a horrific history and coffee has been a part of that history since 1930’s during that time, coffee was a main source of the country’s economy. Back in the days Belgium colonial government would horribly farmers to grow coffee for them to controlling prices
-               
-                
-                "
+                // title="Rwanda has a horrific history and coffee has been a part of that history since 1930’s during that time, coffee was a main source of the country’s economy. Back in the days Belgium colonial government would horribly farmers to grow coffee for them to controlling prices"
+                title={item.description}
                 style={{ fontSize: 14, fontWeight: 400 }}
               />
             </View>
             <View style={{ marginTop: 20 }}>
-              <AppText title="Size" style={{ fontSize: 20 }} />
-              <View style={styles.buttons}>
+              {/* <AppText title="Size" style={{ fontSize: 20 }} /> */}
+              {/* <View style={styles.buttons}>
                 {sizes.map((item, index) => (
                   <TextButton
                     key={index}
@@ -71,7 +70,7 @@ export default function OriginDetailScreen({ route }) {
                     active={index === active ? true : false}
                   />
                 ))}
-              </View>
+              </View> */}
             </View>
           </View>
         </View>

@@ -7,19 +7,19 @@ import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { Ionicons } from "@expo/vector-icons"
 // <FontAwesome6 name="location-dot" size={24} color="black" />
 
-export default function Glass() {
+export default function Glass({ratings,origin,title}) {
   return (
     <View style={styles.container}>
       <View>
-        <AppText title="Rwanda Beans " style={{ fontSize: 20 }} />
+        <AppText title={title} style={{ fontSize: 20 }} />
         <AppText
-          title="From Africa"
+          title={`From ${origin}`}
           style={{ fontSize: 14, fontWeight: 400 }}
         />
         <View style={{ flexDirection: "row", marginTop: 20, gap: 5 }}>
           <AntDesign name="star" size={24} color={colors.primary} />
           <Text style={{ color: colors.white, fontWeight: 600, fontSize: 18 }}>
-            4.5
+            {ratings||"4.5"}
           </Text>
           <Text style={{ color: colors.light }}>(6,879)</Text>
         </View>
@@ -43,7 +43,7 @@ export default function Glass() {
             <Text
               style={{ color: colors.white, fontSize: 16, fontWeight: 600 }}
             >
-              Beans
+              {origin}
             </Text>
           </View>
         </View>
@@ -58,7 +58,7 @@ export default function Glass() {
             borderRadius: 10,
           }}
         >
-          Medium Roasted
+          {/* Medium Roasted */}
         </Text>
       </View>
     </View>
