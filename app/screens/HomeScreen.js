@@ -1,5 +1,12 @@
-import { FlatList, ScrollView, StyleSheet, View } from "react-native"
-import React, { useEffect, useState } from "react"
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native"
+import React, { useEffect, useState, useCallback } from "react"
 import Screen from "../components/Screen"
 import colors from "../utils/colors"
 import AppTextInput from "../components/AppTextInput"
@@ -18,22 +25,19 @@ export default function HomeScreen({ navigation }) {
   const [searchText, setSearchText] = useState("")
 
   const [shopData, setShopData] = useState(shops)
-
-  const filteredShopData = shopData.filter(shop =>
-    shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
-  )
   useEffect(() => {
     setShopData(shops)
-  }, [shopData])
-  // useEffect(() => {
-  //   setFilter(shopData =>
-  //     shopData.filter(shop =>
-  //       shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
-  //     )
-  //   )
-  // }, [searchText])
-  // const dummyShopCover =
-  //   "https://media.gettyimages.com/id/1428594094/photo/empty-coffee-shop-interior-with-wooden-tables-coffee-maker-pastries-and-pendant-lights.jpg?s=612x612&w=gi&k=20&c=Tu0dyFuw3p1UDS_I19ifEvqOxPqWzLKqIx0S-6uYCqA="
+  }, [])
+  useEffect(() => {
+    setShopData(shopData =>
+      shopData.filter(shop =>
+        shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
+      )
+    )
+  }, [searchText])
+
+  const dummyShopCover =
+    "https://media.gettyimages.com/id/1428594094/photo/empty-coffee-shop-interior-with-wooden-tables-coffee-maker-pastries-and-pendant-lights.jpg?s=612x612&w=gi&k=20&c=Tu0dyFuw3p1UDS_I19ifEvqOxPqWzLKqIx0S-6uYCqA="
   return (
     <Screen style={styles.container}>
       <ScrollView>
@@ -73,6 +77,7 @@ export default function HomeScreen({ navigation }) {
                     keyExtractor={data => data._id.toString()}
                     renderItem={({ item }) => (
                       <GradientCard
+                        item={item}
                         image={item.cover_image[0]}
                         title={item.origin + " Beans"}
                         decription={item.description}
@@ -87,7 +92,7 @@ export default function HomeScreen({ navigation }) {
               </View>
             )}
             <View>
-              {shops.length > 0 ? (
+              {shopData.length > 0 ? (
                 <FlatList
                   horizontal
                   data={filteredShopData}
@@ -99,7 +104,7 @@ export default function HomeScreen({ navigation }) {
                       decription={item.description.split(0, 20) + "..."}
                       image={item.cover_image[0]}
                       // origin={item.origin}
-
+                      item={item}
                       stars={item.rating}
                       title={item.shop_name}
                       icon={"heart"}

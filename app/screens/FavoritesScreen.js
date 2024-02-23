@@ -1,12 +1,27 @@
 import { FlatList, StyleSheet, Text, View } from "react-native"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { useGetShops } from "../hooks/fetch"
 import AppText from "../components/AppText"
 import GradientCard from "../components/GradientCard"
 import Screen from "../components/Screen"
+import { useFavouritesStore } from "../hooks/localStorage"
 
 export default function FavoritesScreen({ navigation }) {
-  const { getShops, shops } = useGetShops()
+  // const { getShops, shops } = useGetShops()
+  const [shops,setShops] = useState([])
+  const {getAllFavourites} = useFavouritesStore()
+  useEffect(()=>{
+    (async()=>{
+      try {
+        const allFavs = await getAllFavourites();
+        console.log({allFavs})
+        if(allFavs && allFavs.length > 0){
+          setShops(v=>allFavs.map(val=>JSON.parse(val)))
+        }
+      } catch (e) {
+      }
+    })()
+  },[])
   return (
     <Screen>
       <View style={{ width: "100%" }}>
@@ -30,9 +45,9 @@ export default function FavoritesScreen({ navigation }) {
         }}
       >
         {shops.length > 0 ? (
-          shops.map(item => (
+          shops.map((item,i) => (
             <GradientCard
-              key={item._id}
+            key={item._id}
               distance={2000}
               totalRatings={item.ratingCount}
               decription={item.description.split(0, 20) + "..."}
@@ -40,6 +55,7 @@ export default function FavoritesScreen({ navigation }) {
               stars={item.rating}
               title={item.shop_name}
               icon={"heart"}
+              item={item}
               onPress={() => navigation.navigate("Shop", item)}
               style={{
                 marginRight: 0,
@@ -47,7 +63,7 @@ export default function FavoritesScreen({ navigation }) {
             />
           ))
         ) : (
-          <AppText title="Loading..." />
+          <AppText title="No favourite" />
         )}
       </View>
     </Screen>
