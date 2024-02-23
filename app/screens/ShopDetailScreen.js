@@ -15,7 +15,7 @@ import { useFavouritesStore } from "../hooks/localStorage"
 
 export default function ShopDetailScreen({ route }) {
   const shop = route.params
-  const {fav,toggleFavouriteStore} = useFavouritesStore(shop._id)
+  const {fav,toggleFavouriteStore} = useFavouritesStore(shop)
   // console.log(shop)
   return (
     <Screen style={styles.screen}>
@@ -31,11 +31,9 @@ export default function ShopDetailScreen({ route }) {
           </View>
           <View style={styles.btnContainer}>
             <TextButton title="Direction" />
-            <TouchableOpacity onPress={ e=>{
-         toggleFavouriteStore(JSON.stringify(shop))
-            }}>
-            <IconButton  color={fav && "red"} icon="heart" />
-            </TouchableOpacity>
+            <IconButton  onPress={ async e=>{
+         await toggleFavouriteStore(shop)
+            }} color={fav && "red"} icon="heart" />
             {/* <IconButton icon="sharealt" /> */}
           </View>
           <View style={styles.description}>
@@ -50,7 +48,7 @@ export default function ShopDetailScreen({ route }) {
           
           {shop.hasOwnProperty("social_link") ?<View style={styles.container}>
             <AppText title="Instagram" color={true} />
-            <TouchableOpacity onPress={async e=>Linking.openURL(shop.social_link)} style={styles.title}>
+            <TouchableOpacity onPress={async e=>Linking.openURL((shop.social_link.includes("http://") || shop.social_link.includes("https://")) ? shop.social_link : `https://www.google.com/search?q=${shop.social_link}`)} style={styles.title}>
               <AppText title={shop.shop_name} color={true} />
               <AntDesign name="instagram" size={24} color={colors.primary} />
             </TouchableOpacity>

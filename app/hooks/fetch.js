@@ -5,15 +5,14 @@ export const useGetShops =()=>{
     const [shops,setShops] = useState([])
     const getShops = useCallback(async()=>{
         try{
-            const gShops = await request.get("/shops")
-            // console.log(gShops.data[0].cover_image[0])
-            setShops(gShops.data)
+            const gShops = await request.get("/shops");
+            setShops(gShops.data);
         }catch(e){
             console.log(e.message||"an error occured while getting shops")
         }
     },[])
     useEffect(()=>{
-        getShops()
+        (async()=>await getShops())()
     },[])
     return {shops,getShops}
 }
@@ -30,6 +29,7 @@ export const useGetOrigin =()=>{
     },[])
     useEffect(()=>{
         getorigin()
+        
     },[])
     return {origin,getorigin}
 }
