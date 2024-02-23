@@ -32,6 +32,7 @@ export default function FavoritesScreen({ navigation }) {
         {shops.length > 0 ? (
           shops.map(item => (
             <GradientCard
+              key={item._id}
               distance={2000}
               totalRatings={item.ratingCount}
               decription={item.description.split(0, 20) + "..."}

@@ -3,14 +3,14 @@ import React from "react"
 import { EvilIcons } from "@expo/vector-icons"
 import colors from "../utils/colors"
 
-export default function AppTextInput({ onChange, searchText }) {
-  // const handleChange = ({ nativeEvent: { text } }) => {
-  //   if (text) {
-  //     onChange(true)
-  //   } else {
-  //     onChange(false)
-  //   }
-  // }
+export default function AppTextInput({ onChange, searchText, onModal }) {
+  const handleChange = ({ nativeEvent: { text } }) => {
+    if (text) {
+      onModal(true)
+    } else {
+      onModal(false)
+    }
+  }
 
   // Debounce function
   const debounce = (func, delay) => {
@@ -44,6 +44,7 @@ export default function AppTextInput({ onChange, searchText }) {
         placeholderTextColor={colors.light}
         onChangeText={text => handleDebouncedSearch(text)}
         value={searchText}
+        onChange={handleChange}
       />
     </View>
   )
