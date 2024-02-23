@@ -11,6 +11,7 @@ import { LinearGradient } from "expo-linear-gradient"
 import { FontAwesome } from "@expo/vector-icons"
 import Ratings from "./Ratings"
 import colors from "../utils/colors"
+import { useFavouritesStore } from "../hooks/localStorage"
 
 const GradientCard = ({
   image,
@@ -23,8 +24,15 @@ const GradientCard = ({
   icon,
   onPress,
   style,
+  item
 }) => {
-  const [favorite, setFavorite] = useState(false)
+  const {fav:favorite} = useFavouritesStore(item)
+  // const [favorite, setFavorite] = useState(false)
+  // useEffect(()=>{
+  //   (async()=>{
+
+  //   },[])
+  // },[])
   return (
     <TouchableHighlight onPress={onPress}>
       <LinearGradient

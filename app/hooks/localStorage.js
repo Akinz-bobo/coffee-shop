@@ -1,71 +1,76 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect,useState } from 'react';
-export const useFavouritesStore=(shopId)=>{
-    const favKey = "favourite4"
+import { favKeyAddon } from '../utils/constants';
+export const useFavouritesStore=(shopItem)=>{
+    // const favKey = "favouri7"
     const [fav,setFav] = useState(false)
     const getAllFavourites = async () => {
       try {
-        const allFav = await AsyncStorage.getItem(favKey);
+        const allFav = await AsyncStorage.getAllKeys();
         console.log({allFav1:allFav})
-        return allFav ? JSON.parse(allFav) : [];
+        const allFavKeys =  allFav ? allFav.length > 0 ? allFav.reduce((prev,curr)=>{
+          const currItem = curr.split("_")[1]===favKeyAddon ? curr : null
+          if(currItem){
+            prev.push(currItem)
+          }
+        },
+        []): [] : []
+        console.log({allFavKeys})
+        const allFavourites = allFavKeys && allFavKeys.length > 0 ? await AsyncStorage.multiGet(allFavKeys) : []
+        console.log({allFavourites})
+        return allFavourites
       } catch (e) {
-        console.log(e.message)
+        // console.log(e.message)
         return []
       }
     };
-    const storeFavourites = async (item,storedFav) => {
-      console.log({item})
+    const storeFavourites = async (item) => {
       try {
-        const favs = storedFav.push(item);
-        console.log({ favs });
-        await AsyncStorage.setItem(favKey, JSON.stringify(favs));
+        await AsyncStorage.setItem(item._id+favKeyAddon, JSON.stringify(item));
         return "done!";
       } catch (e) {
-        console.log(e.message)
+        // console.log(e.message)
       }
     };
-    const removeFavourite = async (id,storedFav) => {
+    const removeFavourite = async (item) => {
       try {
-        // const storedFav = await getAllFavourites();
-        await AsyncStorage.setItem(
-          favKey,
-          storedFav.filter((v) => v != id)
-        );
+        await AsyncStorage.removeItem(item._id+favKeyAddon)
         return "removed!";
-      } catch (e) { console.log(e.message)}
+      } catch (e) {
+        //  console.log(e.message)
+        }
     };
-    const isFavourite =  (id,allFav=[]) => {
+    const isFavourite =  async(item) => {
       try {
-        // const allFav = favs;
-        console.log({allFav})
-        const isFav = allFav.includes(id);
-        // setFav(isFav);
-        return isFav;
-      } catch (e) { console.log(e.message)}
+        const isFav = await AsyncStorage.getItem(item?._id+favKeyAddon)
+        return isFav ? true :false;
+      } catch (e) { 
+        // console.log(e.message)
+      }
     };
-    const toggleFavouriteStore = async (id) => {
-        // console.log("toggle worked")
+    const toggleFavouriteStore = async (item) => {
+        console.log("toggle worked")
       try {
-        const allFavs = await getAllFavourites()
-        console.log("before is fav")
-        const isFav = isFavourite(id,allFavs);
+        const isFav = isFavourite(item);
         console.log(isFav);
         if (isFav) {
-          removeFavourite(id,allFavs);
+          removeFavourite(item);
           setFav(false);
         }else{
             console.log("Working here")
-            await storeFavourites(id,allFavs);
+            await storeFavourites(item);
             setFav(true);
         }
         return "Done";
-      } catch (e) { console.log(e.message)}
+      } catch (e) { 
+        // console.log(e.message)
+      }
     };
     
     useEffect(()=>{
-        (async()=>{if(shopId){
-            const allF = await getAllFavourites()
-            const isf = isFavourite(shopId,allF);
+        (async()=>{if(shopItem){
+            const isf = await isFavourite(shopItem);
+            // AsyncStorage.multiGet(allF)
             setFav(isf)
         }})()
     },[])
