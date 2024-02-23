@@ -18,19 +18,22 @@ export default function HomeScreen({ navigation }) {
   const [searchText, setSearchText] = useState("")
 
   const [shopData, setShopData] = useState(shops)
+
+  const filteredShopData = shopData.filter(shop =>
+    shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
+  )
   useEffect(() => {
     setShopData(shops)
-  }, [])
-  useEffect(() => {
-    setShopData(shopData =>
-      shopData.filter(shop =>
-        shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
-      )
-    )
-  }, [searchText])
-
-  const dummyShopCover =
-    "https://media.gettyimages.com/id/1428594094/photo/empty-coffee-shop-interior-with-wooden-tables-coffee-maker-pastries-and-pendant-lights.jpg?s=612x612&w=gi&k=20&c=Tu0dyFuw3p1UDS_I19ifEvqOxPqWzLKqIx0S-6uYCqA="
+  }, [shopData])
+  // useEffect(() => {
+  //   setFilter(shopData =>
+  //     shopData.filter(shop =>
+  //       shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
+  //     )
+  //   )
+  // }, [searchText])
+  // const dummyShopCover =
+  //   "https://media.gettyimages.com/id/1428594094/photo/empty-coffee-shop-interior-with-wooden-tables-coffee-maker-pastries-and-pendant-lights.jpg?s=612x612&w=gi&k=20&c=Tu0dyFuw3p1UDS_I19ifEvqOxPqWzLKqIx0S-6uYCqA="
   return (
     <Screen style={styles.container}>
       <ScrollView>
@@ -57,7 +60,7 @@ export default function HomeScreen({ navigation }) {
                   backgroundColor: colors.dark,
                 }}
               >
-                <Suggestions shops={shopData} />
+                <Suggestions shops={filteredShopData} />
               </GradientWrapper>
             )}
 
@@ -87,7 +90,7 @@ export default function HomeScreen({ navigation }) {
               {shops.length > 0 ? (
                 <FlatList
                   horizontal
-                  data={shopData}
+                  data={filteredShopData}
                   keyExtractor={data => data._id}
                   renderItem={({ item }) => (
                     <GradientCard
