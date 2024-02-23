@@ -4,8 +4,6 @@ import { useGetShops } from "../hooks/fetch"
 import colors from "../utils/colors"
 
 export default function Suggestions({ shops }) {
-  //   const { getShops, shops } = useGetShops()
-  //   console.log(shops[0])
   return (
     <View style={{ paddingTop: 15, paddingRight: 15 }}>
       {shops.map(item => (
