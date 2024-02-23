@@ -26,7 +26,7 @@ const GradientCard = ({
   style,
   item
 }) => {
-  const {fav:favorite} = useFavouritesStore(item)
+  const {fav:favorite,toggleFavouriteStore} = useFavouritesStore(item)
   // const [favorite, setFavorite] = useState(false)
   // useEffect(()=>{
   //   (async()=>{
@@ -73,7 +73,7 @@ const GradientCard = ({
                 start={{ x: 0.1, y: 0.2 }}
                 style={styles.icon}
               >
-                <TouchableOpacity onPress={() => setFavorite(!favorite)}>
+                <TouchableOpacity onPress={() => toggleFavouriteStore(item)}>
                   <FontAwesome
                     name={icon}
                     size={24}

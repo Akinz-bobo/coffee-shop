@@ -17,14 +17,23 @@ export default function HomeScreen({ navigation }) {
   const { getorigin, origin } = useGetOrigin()
   const [searchText, setSearchText] = useState("")
 
-  const [shopData, setShopData] = useState([])
-
-  const filteredShopData = shopData.filter(shop =>
-    shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
-  )
-  useEffect(() => {
-    setShopData(prev => [...prev, ...shops])
-  }, [])
+  const [shopData, setShopData] = useState(shops)
+  const filterShop = useCallback(()=>{
+    if(searchText.length > 0){
+      setShopData(al=>shops.filter(v=>v.shop_name.toLowerCase().includes(searchText.toLowerCase())))
+      return
+    }
+    setShopData(shops)
+  }, [searchText])
+  useEffect(()=>{
+    filterShop()
+  },[searchText])
+  // const filteredShopData = shopData.filter(shop =>
+  //   shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
+  // )
+  // console.log(filteredShopData.length)
+  const dummyShopCover =
+    "https://media.gettyimages.com/id/1428594094/photo/empty-coffee-shop-interior-with-wooden-tables-coffee-maker-pastries-and-pendant-lights.jpg?s=612x612&w=gi&k=20&c=Tu0dyFuw3p1UDS_I19ifEvqOxPqWzLKqIx0S-6uYCqA="
   return (
     <Screen style={styles.container}>
       <ScrollView>
@@ -39,7 +48,6 @@ export default function HomeScreen({ navigation }) {
 
           <View style={styles.textInputContainer}>
             <Filter />
-
             {modalVisible && (
               <GradientWrapper
                 modalVisible={modalVisible}

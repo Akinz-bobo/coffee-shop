@@ -9,14 +9,17 @@ export const useFavouritesStore=(shopItem)=>{
         const allFav = await AsyncStorage.getAllKeys();
         console.log({allFav1:allFav})
         const allFavKeys =  allFav ? allFav.length > 0 ? allFav.reduce((prev,curr)=>{
-          const currItem = curr.split("_")[1]===favKeyAddon ? curr : null
+          const currItem = curr.includes(favKeyAddon)
           if(currItem){
-            prev.push(currItem)
+            prev.push(curr)
           }
+          return prev
         },
         []): [] : []
         console.log({allFavKeys})
-        const allFavourites = allFavKeys && allFavKeys.length > 0 ? await AsyncStorage.multiGet(allFavKeys) : []
+        const allFavourites = allFavKeys && allFavKeys.length > 0 ?
+         (await AsyncStorage.multiGet(allFavKeys)).map(([a,b])=>b)
+          : []
         console.log({allFavourites})
         return allFavourites
       } catch (e) {
@@ -43,6 +46,7 @@ export const useFavouritesStore=(shopItem)=>{
     const isFavourite =  async(item) => {
       try {
         const isFav = await AsyncStorage.getItem(item?._id+favKeyAddon)
+        // console.log({isFav})
         return isFav ? true :false;
       } catch (e) { 
         // console.log(e.message)
@@ -51,8 +55,8 @@ export const useFavouritesStore=(shopItem)=>{
     const toggleFavouriteStore = async (item) => {
         console.log("toggle worked")
       try {
-        const isFav = isFavourite(item);
-        console.log(isFav);
+        const isFav = await isFavourite(item);
+        console.log({isFav});
         if (isFav) {
           removeFavourite(item);
           setFav(false);
