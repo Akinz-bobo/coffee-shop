@@ -24,7 +24,7 @@ export default function HomeScreen({ navigation }) {
   )
   useEffect(() => {
     setShopData(prev => [...prev, ...shops])
-  }, [shopData])
+  }, [])
   return (
     <Screen style={styles.container}>
       <ScrollView>

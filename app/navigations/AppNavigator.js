@@ -3,6 +3,7 @@ import ShopDetailScreen from "../screens/ShopDetailScreen"
 import HomeScreen from "../screens/HomeScreen"
 import OriginDetailScreen from "../screens/OriginDetailScreen"
 import BackButton from "../components/BackButton"
+import MapScreen from "../screens/MapScreen"
 
 const Stack = createNativeStackNavigator()
 
@@ -13,7 +14,7 @@ const AppNavigator = () => (
       headerLeft: ({}) => <BackButton />,
     }}
   >
-    <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Screen name="Home" component={MapScreen} />
     <Stack.Screen name="Shop" component={ShopDetailScreen} />
     <Stack.Screen name="Origin" component={OriginDetailScreen} />
   </Stack.Navigator>
