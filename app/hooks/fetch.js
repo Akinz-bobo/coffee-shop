@@ -6,6 +6,8 @@ export const useGetShops =()=>{
     const getShops = useCallback(async()=>{
         try{
             const gShops = await request.get("/shops");
+            // console.log("Shops")
+            // console.log({gShops})
             setShops(gShops.data);
         }catch(e){
             console.log(e.message||"an error occured while getting shops")

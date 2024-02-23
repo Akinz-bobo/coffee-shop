@@ -1,5 +1,5 @@
 import { FlatList, ScrollView, StyleSheet, View } from "react-native"
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import Screen from "../components/Screen"
 import colors from "../utils/colors"
 import AppTextInput from "../components/AppTextInput"
@@ -17,17 +17,18 @@ export default function HomeScreen({ navigation }) {
   const { getorigin, origin } = useGetOrigin()
   const [searchText, setSearchText] = useState("")
 
-  const [shopData, setShopData] = useState(shops)
+  const [shopData, setShopData] = useState([])
   const filterShop = useCallback(()=>{
     if(searchText.length > 0){
       setShopData(al=>shops.filter(v=>v.shop_name.toLowerCase().includes(searchText.toLowerCase())))
-      return
+      return  
     }
     setShopData(shops)
-  }, [searchText])
+  }, [searchText,shops.length])
   useEffect(()=>{
     filterShop()
-  },[searchText])
+  },[searchText,shops.length])
+
   // const filteredShopData = shopData.filter(shop =>
   //   shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
   // )
@@ -59,7 +60,7 @@ export default function HomeScreen({ navigation }) {
                   backgroundColor: colors.dark,
                 }}
               >
-                <Suggestions shops={filteredShopData} />
+                <Suggestions shops={shopData} />
               </GradientWrapper>
             )}
 
@@ -86,11 +87,11 @@ export default function HomeScreen({ navigation }) {
               </View>
             )}
             <View>
-              {shops.length > 0 ? (
+              {shopData.length > 0 ? (
                 <FlatList
                   horizontal
-                  data={filteredShopData}
-                  keyExtractor={data => data._id}
+                  data={shopData}
+                  keyExtractor={(data,i) => data._id.toString()+i}
                   renderItem={({ item }) => (
                     <GradientCard
                       distance={2000}

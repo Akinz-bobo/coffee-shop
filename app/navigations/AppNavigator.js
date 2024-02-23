@@ -14,7 +14,8 @@ const AppNavigator = () => (
       headerLeft: ({}) => <BackButton />,
     }}
   >
-    <Stack.Screen name="Home" component={MapScreen} />
+    <Stack.Screen name="Home" component={HomeScreen} />
+    <Stack.Screen name="Map" component={MapScreen} />
     <Stack.Screen name="Shop" component={ShopDetailScreen} />
     <Stack.Screen name="Origin" component={OriginDetailScreen} />
   </Stack.Navigator>
