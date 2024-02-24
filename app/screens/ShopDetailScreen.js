@@ -10,12 +10,14 @@ import Gallery from "../components/Gallery"
 import { AntDesign } from "@expo/vector-icons"
 import Menu from "../components/Menu"
 import { useFavouritesStore } from "../hooks/localStorage"
+import { useFavouriteCtx } from "../contexts/FavouritesCtx"
 // import { togglFavouriteStore } from "../utils/storageFunctions"
 // import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ShopDetailScreen({ route }) {
   const shop = route.params
   const {fav,toggleFavouriteStore} = useFavouritesStore(shop)
+  const {getFav} = useFavouriteCtx()
   // console.log(shop)
   return (
     <Screen style={styles.screen}>
@@ -33,6 +35,7 @@ export default function ShopDetailScreen({ route }) {
             <TextButton title="Direction" />
             <IconButton  onPress={ async e=>{
          await toggleFavouriteStore(shop)
+         getFav()
             }} color={fav && "red"} icon="heart" />
             {/* <IconButton icon="sharealt" /> */}
           </View>
