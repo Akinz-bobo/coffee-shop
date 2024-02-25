@@ -10,6 +10,7 @@ import Logo from "../components/Logo"
 import AppText from "../components/AppText"
 import { useGetOrigin, useGetShops } from "../hooks/fetch"
 import Suggestions from "../components/Suggestions"
+import Loading from "../assets/lottie/Loading"
 
 export default function HomeScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState()
@@ -86,7 +87,7 @@ export default function HomeScreen({ navigation }) {
                     )}
                   />
                 ) : (
-                  <AppText title="Loading..." />
+                  <Loading />
                 )}
               </View>
             )}
@@ -111,7 +112,7 @@ export default function HomeScreen({ navigation }) {
                   )}
                 />
               ) : (
-                <AppText title="Loading..." />
+                <Loading />
               )}
             </View>
           </View>

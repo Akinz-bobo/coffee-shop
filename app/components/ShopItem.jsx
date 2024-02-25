@@ -3,14 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 import colors from "../utils/colors"
 import { FontAwesome } from "@expo/vector-icons"
 
-const ShopItem = ({ item, setSelectedId }) => {
+const ShopItem = ({ item, onPress }) => {
   const distance = Math.floor(+item.distance)
-  const onPress = item => {
-    // console.log(item)
-    setSelectedId(item.id)
-  }
   return (
-    <TouchableOpacity onPress={() => onPress(item)}>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.wraper}>
         <Text style={styles.name}>{item.name}</Text>
         <View style={styles.container}>

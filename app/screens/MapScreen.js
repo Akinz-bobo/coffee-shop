@@ -13,6 +13,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import MapViewDirections from "react-native-maps-directions"
 import * as Location from "expo-location"
 import AppBottomSheet from "../components/AppBottomSheet"
+import { useMapContext } from "../contexts/MapCtx"
 // import BottomSheet from "@gorhom/bottom-sheet"
 
 // https://docs.expo.dev/versions/latest/sdk/map-view/
@@ -51,84 +52,9 @@ function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
   )
 }
 
-export default function MapScreen() {
-  // ref
-  const bottomSheetRef = useRef(null)
-
-  // variables
-  const snapPoints = useMemo(() => ["25%", "50%"], [])
-
-  // callbacks
-  const handleSheetChanges = useCallback(index => {
-    console.log("handleSheetChanges", index)
-  }, [])
-
-  const [origin, setOrigin] = useState({ latitude: 0, longitude: 0 })
-  const [destination, setDestination] = useState({ latitude: 0, longitude: 0 })
-  const [showDirections, setShowDirections] = useState(false)
-  const [distance, setDistance] = useState(0)
-  const [duration, setDuration] = useState(0)
-  const mapRef = useRef(null)
-
-  const getOrigin = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync()
-    if (status !== "granted") {
-      alert("Permission to access location was denied")
-      return
-    }
-
-    let location = await Location.getCurrentPositionAsync({})
-    setOrigin({
-      latitude: location.coords.longitude,
-      longitude: location.coords.latitude,
-    })
-  }
-  useEffect(() => {
-    getOrigin()
-  }, [])
-
-  const moveTo = async position => {
-    const camera = await mapRef.current?.getCamera()
-    if (camera) {
-      camera.center = position
-      mapRef.current?.animateCamera(camera, { duration: 1000 })
-    }
-  }
-
-  const edgePaddingValue = 70
-
-  const edgePadding = {
-    top: edgePaddingValue,
-    right: edgePaddingValue,
-    bottom: edgePaddingValue,
-    left: edgePaddingValue,
-  }
-
-  const traceRouteOnReady = args => {
-    console.log(args)
-    if (args) {
-      setDistance(args.distance)
-      setDuration(args.duration)
-    }
-  }
-
-  const traceRoute = () => {
-    // console.log(origin, destination)
-    if (origin && destination) {
-      setShowDirections(true)
-      mapRef.current?.fitToCoordinates([origin, destination], { edgePadding })
-    }
-  }
-
-  const onPlaceSelected = (details, flag) => {
-    const set = flag === "origin" ? setOrigin : setDestination
-    const position = {
-      latitude: details?.geometry.location.lat || 0,
-      longitude: details?.geometry.location.lng || 0,
-    }
-    set(position)
-    moveTo(position)
-  }
+export default function MapScreen({ navigation }) {
+  const { origin, destination, showDirections, traceRouteOnReady, mapRef } =
+    useMapContext()
 
   return (
     <View style={styles.container}>
@@ -153,7 +79,7 @@ export default function MapScreen() {
           />
         )}
       </MapView>
-      <AppBottomSheet />
+      <AppBottomSheet navitation={navigation} />
     </View>
   )
 }

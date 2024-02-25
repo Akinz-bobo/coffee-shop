@@ -11,12 +11,14 @@ import { KEY } from "../../environment"
 import ShopItem from "./ShopItem"
 import { Fontisto } from "@expo/vector-icons"
 import Loading from "../assets/lottie/Loading"
+import { useMapContext } from "../contexts/MapCtx"
 
-export default function AppBottomSheet() {
+export default function AppBottomSheet({ moveTo, navitation }) {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState([])
   const [offset, setOffset] = useState(0)
   const [selectedId, setSelectedId] = useState(null)
+  const { bottomSheetRef } = useMapContext()
   // fetch yelp data
   async function searchBusiness(term, location) {
     console.log("called")
@@ -48,16 +50,16 @@ export default function AppBottomSheet() {
     }
   }
 
+  // console.log(data[0])
   function loadMoreShops() {
     searchBusiness("Cafés & Coffee Shops", "San Francisco, CA")
     setOffset(prev => prev + 50)
   }
 
   // ref
-  const bottomSheetRef = useRef(null)
 
   // variables
-  const snapPoints = useMemo(() => ["25%", "90%"], [])
+  const snapPoints = useMemo(() => ["25%", "90%"])
 
   const renderBackdrop = useCallback(
     props => (
@@ -96,7 +98,11 @@ export default function AppBottomSheet() {
             return data.id + index.toString()
           }}
           renderItem={({ item }) => (
-            <ShopItem item={item} setSelectedId={setSelectedId} />
+            <ShopItem
+              item={item}
+              setSelectedId={setSelectedId}
+              onPress={() => navitation.navigate("ShopDetail", item)}
+            />
           )}
         />
       </View>
