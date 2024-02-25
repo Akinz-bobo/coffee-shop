@@ -5,23 +5,12 @@ import AppText from "../components/AppText"
 import GradientCard from "../components/GradientCard"
 import Screen from "../components/Screen"
 import { useFavouritesStore } from "../hooks/localStorage"
+import { useFavouriteCtx } from "../contexts/FavouritesCtx"
 
 export default function FavoritesScreen({ navigation }) {
   // const { getShops, shops } = useGetShops()
-  const [shops,setShops] = useState([])
-  const {getAllFavourites} = useFavouritesStore()
-  useEffect(()=>{
-    (async()=>{
-      try {
-        const allFavs = await getAllFavourites();
-        console.log({allFavs})
-        if(allFavs && allFavs.length > 0){
-          setShops(v=>allFavs.map(val=>JSON.parse(val)))
-        }
-      } catch (e) {
-      }
-    })()
-  },[])
+  // const [shops,setShops] = useState([])
+  const {fav:shops,getFav} = useFavouriteCtx()
   return (
     <Screen>
       <View style={{ width: "100%" }}>
@@ -45,15 +34,15 @@ export default function FavoritesScreen({ navigation }) {
         }}
       >
         {shops.length > 0 ? (
-          shops.map((item,i) => (
+          shops.filter((val)=>val != null).map((item,i) => (
             <GradientCard
-            key={item._id}
+            key={item?._id || i+"favRender"}
               distance={2000}
-              totalRatings={item.ratingCount}
-              decription={item.description.split(0, 20) + "..."}
-              image={item.cover_image[0]}
-              stars={item.rating}
-              title={item.shop_name}
+              totalRatings={item?.ratingCount}
+              decription={item?.description.split(0, 20) + "..."}
+              image={item?.cover_image[0]}
+              stars={item?.rating}
+              title={item?.shop_name}
               icon={"heart"}
               item={item}
               onPress={() => navigation.navigate("Shop", item)}
