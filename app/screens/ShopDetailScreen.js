@@ -1,4 +1,10 @@
-import { ScrollView, StyleSheet, TouchableOpacity, View,Linking } from "react-native"
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Linking,
+} from "react-native"
 import React from "react"
 import Screen from "../components/Screen"
 import Logo from "../components/Logo"
@@ -16,8 +22,8 @@ import { useFavouriteCtx } from "../contexts/FavouritesCtx"
 
 export default function ShopDetailScreen({ route }) {
   const shop = route.params
-  const {fav,toggleFavouriteStore} = useFavouritesStore(shop)
-  const {getFav} = useFavouriteCtx()
+  const { fav, toggleFavouriteStore } = useFavouritesStore(shop._id)
+  const { getFav } = useFavouriteCtx()
   // console.log(shop)
   return (
     <Screen style={styles.screen}>
@@ -27,16 +33,27 @@ export default function ShopDetailScreen({ route }) {
           <View style={{ marginTop: 10 }}>
             <AppText title={shop.shop_name} variant="bold" />
             <View style={styles.textContainer}>
-              <AppText title={`Open at ${shop.opening_hour}`} style={styles.text} color={true} />
-              <AppText title={`Closes at ${shop.closing_hour}`} style={styles.text} />
+              <AppText
+                title={`Open at ${shop.opening_hour}`}
+                style={styles.text}
+                color={true}
+              />
+              <AppText
+                title={`Closes at ${shop.closing_hour}`}
+                style={styles.text}
+              />
             </View>
           </View>
           <View style={styles.btnContainer}>
             <TextButton title="Direction" />
-            <IconButton  onPress={ async e=>{
-         await toggleFavouriteStore(shop)
-         getFav()
-            }} color={fav && "red"} icon="heart" />
+            <IconButton
+              onPress={async e => {
+                await toggleFavouriteStore(shop)
+                getFav()
+              }}
+              color={fav && "red"}
+              icon="heart"
+            />
             {/* <IconButton icon="sharealt" /> */}
           </View>
           <View style={styles.description}>
@@ -46,16 +63,31 @@ export default function ShopDetailScreen({ route }) {
               style={{ fontSize: 14 }}
             />
           </View>
-          <Gallery cover_image={shop.cover_image[0]} 
-          image1={shop.images[0]} image2={shop.images[1]} />
-          
-          {shop.hasOwnProperty("social_link") ?<View style={styles.container}>
-            <AppText title="Instagram" color={true} />
-            <TouchableOpacity onPress={async e=>Linking.openURL((shop.social_link.includes("http://") || shop.social_link.includes("https://")) ? shop.social_link : `https://www.google.com/search?q=${shop.social_link}`)} style={styles.title}>
-              <AppText title={shop.shop_name} color={true} />
-              <AntDesign name="instagram" size={24} color={colors.primary} />
-            </TouchableOpacity>
-          </View>:null}
+          <Gallery
+            cover_image={shop.cover_image[0]}
+            image1={shop.images[0]}
+            image2={shop.images[1]}
+          />
+
+          {shop.hasOwnProperty("social_link") ? (
+            <View style={styles.container}>
+              <AppText title="Instagram" color={true} />
+              <TouchableOpacity
+                onPress={async e =>
+                  Linking.openURL(
+                    shop.social_link.includes("http://") ||
+                      shop.social_link.includes("https://")
+                      ? shop.social_link
+                      : `https://www.google.com/search?q=${shop.social_link}`
+                  )
+                }
+                style={styles.title}
+              >
+                <AppText title={shop.shop_name} color={true} />
+                <AntDesign name="instagram" size={24} color={colors.primary} />
+              </TouchableOpacity>
+            </View>
+          ) : null}
           <Menu menu={shop.menu} />
         </View>
       </ScrollView>

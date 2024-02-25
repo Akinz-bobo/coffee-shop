@@ -18,16 +18,20 @@ export default function HomeScreen({ navigation }) {
   const [searchText, setSearchText] = useState("")
 
   const [shopData, setShopData] = useState([])
-  const filterShop = useCallback(()=>{
-    if(searchText.length > 0){
-      setShopData(al=>shops.filter(v=>v.shop_name.toLowerCase().includes(searchText.toLowerCase())))
-      return  
+  const filterShop = useCallback(() => {
+    if (searchText.length > 0) {
+      setShopData(al =>
+        shops.filter(v =>
+          v.shop_name.toLowerCase().includes(searchText.toLowerCase())
+        )
+      )
+      return
     }
     setShopData(shops)
-  }, [searchText,shops.length])
-  useEffect(()=>{
+  }, [searchText, shops.length])
+  useEffect(() => {
     filterShop()
-  },[searchText,shops.length])
+  }, [searchText, shops.length])
 
   // const filteredShopData = shopData.filter(shop =>
   //   shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
@@ -91,15 +95,14 @@ export default function HomeScreen({ navigation }) {
                 <FlatList
                   horizontal
                   data={shopData}
-                  keyExtractor={(data,i) => data._id.toString()+i}
-                  renderItem={({ item }) => (
+                  keyExtractor={(data, i) => data._id.toString() + i}
+                  renderItem={({ item, index }) => (
                     <GradientCard
                       distance={2000}
                       totalRatings={item.ratingCount}
                       decription={item.description.split(0, 20) + "..."}
                       image={item.cover_image[0]}
-                      // origin={item.origin}
-
+                      id={item._id}
                       stars={item.rating}
                       title={item.shop_name}
                       icon={"heart"}

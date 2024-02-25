@@ -25,10 +25,9 @@ const GradientCard = ({
   icon,
   onPress,
   style,
-  item
+  id,
 }) => {
-  const {fav:favorite,toggleFavouriteStore} = useFavouritesStore(item)
-  const {getFav} = useFavouriteCtx()
+  const { fav: favorite, toggleFavouriteStore } = useFavouritesStore(id)
 
   return (
     <TouchableHighlight onPress={onPress}>
@@ -74,11 +73,11 @@ const GradientCard = ({
                   await toggleFavouriteStore(item);
                   await getFav()
                   }}> */}
-                  <FontAwesome
-                    name={icon}
-                    size={24}
-                    color={favorite ? colors.red : colors.white}
-                  />
+                <FontAwesome
+                  name={icon}
+                  size={24}
+                  color={favorite ? colors.red : colors.white}
+                />
                 {/* </TouchableOpacity> */}
               </LinearGradient>
             )}

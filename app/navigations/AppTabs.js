@@ -4,9 +4,11 @@ import AppNavigator from "./AppNavigator"
 import { FontAwesome } from "@expo/vector-icons"
 import colors from "../utils/colors"
 import ShopNavigator from "./ShopNavation"
+import { useFavouriteCtx } from "../contexts/FavouritesCtx"
 const Tab = createBottomTabNavigator()
 
 export default AppTabs = () => {
+  const { fav } = useFavouriteCtx()
   return (
     <Tab.Navigator
       initialRouteName="Feed"
@@ -50,7 +52,7 @@ export default AppTabs = () => {
       <Tab.Screen
         name="Favorites"
         component={FavoritesScreen}
-        options={{ tabBarBadge: 3, tabBarShowLabel: false }}
+        options={{ tabBarBadge: fav.length, tabBarShowLabel: false }}
       />
     </Tab.Navigator>
   )
