@@ -7,7 +7,9 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <NavigationContainer theme={navigationTheme}>
-        <AppTabs />
+        <FavCtxWrapper>
+          <AppTabs />
+        </FavCtxWrapper>
       </NavigationContainer>
     </GestureHandlerRootView>
   )
