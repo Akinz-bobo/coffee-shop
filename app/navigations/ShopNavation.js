@@ -7,17 +7,16 @@ import MapScreen from "../screens/MapScreen"
 
 const Stack = createNativeStackNavigator()
 
-const AppNavigator = () => (
+const ShopNavigator = () => (
   <Stack.Navigator
     screenOptions={{
       headerShown: false,
-      headerLeft: ({}) => <BackButton />,
+      headerRight: ({}) => <BackButton />,
     }}
   >
-    <Stack.Screen name="Root" component={HomeScreen} />
-    <Stack.Screen name="Shop" component={ShopDetailScreen} />
-    <Stack.Screen name="Origin" component={OriginDetailScreen} />
+    <Stack.Screen name="MapScreen" component={MapScreen} />
+    <Stack.Screen name="ShopDetail" component={ShopDetailScreen} />
   </Stack.Navigator>
 )
 
-export default AppNavigator
+export default ShopNavigator

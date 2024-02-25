@@ -1,78 +1,159 @@
-import React, { useEffect, useState } from "react"
-import MapView, { PROVIDER_GOOGLE } from "react-native-maps"
-import { Dimensions, StyleSheet, View } from "react-native"
-import * as Location from "expo-location"
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
+import {
+  StyleSheet,
+  View,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+} from "react-native"
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"
+import { KEY } from "..//../environment"
+import Constants from "expo-constants"
+import { useEffect, useRef, useState, useCallback, useMemo } from "react"
+import MapViewDirections from "react-native-maps-directions"
+import * as Location from "expo-location"
+import AppBottomSheet from "../components/AppBottomSheet"
+// import BottomSheet from "@gorhom/bottom-sheet"
+
+// https://docs.expo.dev/versions/latest/sdk/map-view/
+// https://www.npmjs.com/package/react-native-google-places-autocomplete
+// https://www.npmjs.com/package/react-native-maps-directions
+
+const { width, height } = Dimensions.get("window")
+
+const ASPECT_RATIO = width / height
+const LATITUDE_DELTA = 0.02
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
+const INITIAL_POSITION = {
+  latitude: 40.76711,
+  longitude: -73.979704,
+  latitudeDelta: LATITUDE_DELTA,
+  longitudeDelta: LONGITUDE_DELTA,
+}
+
+function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
+  return (
+    <>
+      <Text>{label}</Text>
+      <GooglePlacesAutocomplete
+        styles={{ textInput: styles.input }}
+        placeholder={placeholder || ""}
+        fetchDetails
+        onPress={(data, details = null) => {
+          onPlaceSelected(details)
+        }}
+        query={{
+          key: KEY.GOOGLE_API_KEY,
+          language: "pt-BR",
+        }}
+      />
+    </>
+  )
+}
+
 export default function MapScreen() {
-  const [location, setLocation] = useState({ latitude: null, longitude: null })
+  // ref
+  const bottomSheetRef = useRef(null)
 
-  useEffect(() => {
-    const requestLocationPermission = async () => {
-      try {
-        const { status } = await Location.requestForegroundPermissionsAsync()
+  // variables
+  const snapPoints = useMemo(() => ["25%", "50%"], [])
 
-        if (status === "granted") {
-          const location = await Location.getCurrentPositionAsync({})
-          const { latitude, longitude } = location.coords
-          setLocation({ latitude, longitude })
-        } else {
-          console.log("Location permission denied")
-        }
-      } catch (err) {
-        console.warn(err)
-      }
-    }
-
-    const checkLocationPermission = async () => {
-      try {
-        const { status } = await Location.getForegroundPermissionsAsync()
-
-        if (status === "granted") {
-          const location = await Location.getCurrentPositionAsync({})
-          const { latitude, longitude } = location.coords
-          setLocation({ latitude, longitude })
-        } else if (status === "undetermined") {
-          requestLocationPermission()
-        } else {
-          console.log("Location permission denied")
-        }
-      } catch (err) {
-        console.warn(err)
-      }
-    }
-
-    checkLocationPermission()
+  // callbacks
+  const handleSheetChanges = useCallback(index => {
+    console.log("handleSheetChanges", index)
   }, [])
-  const { latitude, longitude } = location
-  const { width, height } = Dimensions.get("window")
-  const ASPECT_RATIO = width / height
-  const LATITUDE_DELTA = 0.02
-  const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
-  const INITIAL_POSITION = {
-    latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA,
-    longitude: longitude ? longitude : 3.8975136,
-    latitude: latitude ? latitude : 7.4509795,
+
+  const [origin, setOrigin] = useState({ latitude: 0, longitude: 0 })
+  const [destination, setDestination] = useState({ latitude: 0, longitude: 0 })
+  const [showDirections, setShowDirections] = useState(false)
+  const [distance, setDistance] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const mapRef = useRef(null)
+
+  const getOrigin = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync()
+    if (status !== "granted") {
+      alert("Permission to access location was denied")
+      return
+    }
+
+    let location = await Location.getCurrentPositionAsync({})
+    setOrigin({
+      latitude: location.coords.longitude,
+      longitude: location.coords.latitude,
+    })
   }
-  console.log(location)
+  useEffect(() => {
+    getOrigin()
+  }, [])
+
+  const moveTo = async position => {
+    const camera = await mapRef.current?.getCamera()
+    if (camera) {
+      camera.center = position
+      mapRef.current?.animateCamera(camera, { duration: 1000 })
+    }
+  }
+
+  const edgePaddingValue = 70
+
+  const edgePadding = {
+    top: edgePaddingValue,
+    right: edgePaddingValue,
+    bottom: edgePaddingValue,
+    left: edgePaddingValue,
+  }
+
+  const traceRouteOnReady = args => {
+    console.log(args)
+    if (args) {
+      setDistance(args.distance)
+      setDuration(args.duration)
+    }
+  }
+
+  const traceRoute = () => {
+    // console.log(origin, destination)
+    if (origin && destination) {
+      setShowDirections(true)
+      mapRef.current?.fitToCoordinates([origin, destination], { edgePadding })
+    }
+  }
+
+  const onPlaceSelected = (details, flag) => {
+    const set = flag === "origin" ? setOrigin : setDestination
+    const position = {
+      latitude: details?.geometry.location.lat || 0,
+      longitude: details?.geometry.location.lng || 0,
+    }
+    set(position)
+    moveTo(position)
+  }
+
   return (
     <View style={styles.container}>
       <MapView
+        showsUserLocation
+        mapType="mutedStandard "
+        ref={mapRef}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_POSITION}
-      />
-      {/* <GooglePlacesAutocomplete
-      placeholder='Search'
-      onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
-        console.log(data, details);
-      }}
-      query={{
-        key: 'YOUR API KEY',
-        language: 'en',
-      }}
-    /> */}
+      >
+        {origin && <Marker coordinate={origin} />}
+        {destination && <Marker coordinate={destination} />}
+        {showDirections && origin && destination && (
+          <MapViewDirections
+            origin={origin}
+            destination={destination}
+            apikey={KEY.GOOGLE_API_KEY}
+            strokeColor="#6644ff"
+            strokeWidth={4}
+            onReady={traceRouteOnReady}
+          />
+        )}
+      </MapView>
+      <AppBottomSheet />
     </View>
   )
 }
@@ -80,9 +161,38 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
   map: {
-    width: "100%",
-    height: "100%",
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+  },
+  searchContainer: {
+    position: "absolute",
+    width: "90%",
+    backgroundColor: "white",
+    shadowColor: "black",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 4,
+    padding: 8,
+    borderRadius: 8,
+    top: Constants.statusBarHeight,
+  },
+  input: {
+    borderColor: "#888",
+    borderWidth: 1,
+  },
+  button: {
+    backgroundColor: "#bbb",
+    paddingVertical: 12,
+    marginTop: 16,
+    borderRadius: 4,
+  },
+  buttonText: {
+    textAlign: "center",
   },
 })

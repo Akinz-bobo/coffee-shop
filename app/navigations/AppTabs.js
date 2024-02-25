@@ -3,6 +3,7 @@ import FavoritesScreen from "../screens/FavoritesScreen"
 import AppNavigator from "./AppNavigator"
 import { FontAwesome } from "@expo/vector-icons"
 import colors from "../utils/colors"
+import ShopNavigator from "./ShopNavation"
 const Tab = createBottomTabNavigator()
 
 export default AppTabs = () => {
@@ -25,8 +26,10 @@ export default AppTabs = () => {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName
 
-          if (route.name === "Root") {
+          if (route.name === "Home") {
             iconName = focused ? "home" : "home"
+          } else if (route.name === "Map") {
+            iconName = focused ? "map-marker" : "map-marker"
           } else if (route.name === "Favorites") {
             iconName = focused ? "heart" : "heart-o"
           }
@@ -34,11 +37,20 @@ export default AppTabs = () => {
         },
       })}
     >
-      <Tab.Screen name="Root" component={AppNavigator} />
+      <Tab.Screen
+        options={{ tabBarShowLabel: false }}
+        name="Home"
+        component={AppNavigator}
+      />
+      <Tab.Screen
+        options={{ tabBarShowLabel: false }}
+        name="Map"
+        component={ShopNavigator}
+      />
       <Tab.Screen
         name="Favorites"
         component={FavoritesScreen}
-        options={{ tabBarBadge: 3 }}
+        options={{ tabBarBadge: 3, tabBarShowLabel: false }}
       />
     </Tab.Navigator>
   )
