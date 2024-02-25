@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native"
+import { Dimensions, StyleSheet, Text, View } from "react-native"
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetFlatList,
@@ -13,12 +13,17 @@ import { Fontisto } from "@expo/vector-icons"
 import Loading from "../assets/lottie/Loading"
 import { useMapContext } from "../contexts/MapCtx"
 
-export default function AppBottomSheet({ moveTo, navitation }) {
+const { width, height } = Dimensions.get("window")
+
+const ASPECT_RATIO = width / height
+const LATITUDE_DELTA = 0.02
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
+export default function AppBottomSheet({ navitation }) {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState([])
   const [offset, setOffset] = useState(0)
   const [selectedId, setSelectedId] = useState(null)
-  const { bottomSheetRef } = useMapContext()
+  const { bottomSheetRef, setMarkers } = useMapContext()
   // fetch yelp data
   async function searchBusiness(term, location) {
     console.log("called")
@@ -40,8 +45,20 @@ export default function AppBottomSheet({ moveTo, navitation }) {
           },
         }
       )
-      // console.log(response.data.businesses[0])
+      console.log(response.data.businesses[0].coordinates)
       setData(previous => [...previous, ...response.data.businesses])
+      let placesOfInterest = response.data.businesses.map(business => {
+        let place = {
+          title: business.name,
+          ...business.coordinates,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }
+        return place
+      })
+
+      setMarkers(previous => [...previous, ...placesOfInterest])
+
       return
     } catch (error) {
       console.log(error)

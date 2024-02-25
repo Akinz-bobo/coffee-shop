@@ -1,4 +1,11 @@
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+} from "react-native"
 import React, { useEffect, useState } from "react"
 import colors from "../utils/colors"
 import { FontAwesome } from "@expo/vector-icons"
@@ -10,8 +17,13 @@ import { TouchableOpacity } from "@gorhom/bottom-sheet"
 import Constants from "expo-constants"
 import { useMapContext } from "../contexts/MapCtx"
 
+const { width, height } = Dimensions.get("window")
+
+const ASPECT_RATIO = width / height
+const LATITUDE_DELTA = 0.02
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 export default function ShopDetail({ route }) {
-  const { onPlaceSelected, closeBottomSheet } = useMapContext()
+  const { onPlaceSelected, closeBottomSheet, mapRef } = useMapContext()
   const navigation = useNavigation()
   const [shop, setShop] = useState(null)
   const WeekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -50,6 +62,17 @@ export default function ShopDetail({ route }) {
     navigation.goBack()
     onPlaceSelected(shop.coordinates)
     closeBottomSheet()
+    mapRef.current.animateCamera(
+      {
+        center: {
+          ...shop.coordinates,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
+        zoom: 10,
+      },
+      { duration: 3000 }
+    )
   }
   return (
     <ScrollView contentContainerStyle={styles.container}>

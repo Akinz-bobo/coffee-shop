@@ -1,19 +1,12 @@
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps"
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  Text,
-  TouchableOpacity,
-} from "react-native"
+import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps"
+import { StyleSheet, View, Dimensions, Text } from "react-native"
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"
 import { KEY } from "..//../environment"
 import Constants from "expo-constants"
-import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import MapViewDirections from "react-native-maps-directions"
-import * as Location from "expo-location"
 import AppBottomSheet from "../components/AppBottomSheet"
 import { useMapContext } from "../contexts/MapCtx"
+import AppMarker from "../components/AppMarker"
 // import BottomSheet from "@gorhom/bottom-sheet"
 
 // https://docs.expo.dev/versions/latest/sdk/map-view/
@@ -53,9 +46,21 @@ function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
 }
 
 export default function MapScreen({ navigation }) {
-  const { origin, destination, showDirections, traceRouteOnReady, mapRef } =
-    useMapContext()
+  const {
+    origin,
+    destination,
+    showDirections,
+    traceRouteOnReady,
+    mapRef,
+    markers,
+  } = useMapContext()
 
+  const locationsOfInterest = []
+  // const showLocationsOfInterest = () => {
+  //   return markers.map((item, index) => (
+  //     <AppMarker key={index} coordinate={item.location} title={item.name} />
+  //   ))
+  // }
   return (
     <View style={styles.container}>
       <MapView
@@ -65,6 +70,8 @@ export default function MapScreen({ navigation }) {
         style={styles.map}
         provider={PROVIDER_GOOGLE}
         initialRegion={INITIAL_POSITION}
+        showsMyLocationButton
+        // showsIndoors
       >
         {origin && <Marker coordinate={origin} />}
         {destination && <Marker coordinate={destination} />}
@@ -78,6 +85,21 @@ export default function MapScreen({ navigation }) {
             onReady={traceRouteOnReady}
           />
         )}
+        {markers.map((marker, ind) => (
+          <Marker
+            key={ind}
+            coordinate={marker}
+            title={marker.title}
+            image={require("../assets/g2.png")}
+            style={{ height: 60, width: 60, borderRadius: "50%" }}
+          >
+            <Callout>
+              <View>
+                <Text>{marker.title}</Text>
+              </View>
+            </Callout>
+          </Marker>
+        ))}
       </MapView>
       <AppBottomSheet navitation={navigation} />
     </View>

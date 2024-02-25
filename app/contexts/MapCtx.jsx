@@ -15,6 +15,7 @@ const MapCtxProvider = ({ children }) => {
   const [showDirections, setShowDirections] = useState(false)
   const [distance, setDistance] = useState(0)
   const [duration, setDuration] = useState(0)
+  const [markers, setMarkers] = useState([])
   const mapRef = useRef(null)
   const bottomSheetRef = useRef(null)
 
@@ -85,6 +86,8 @@ const MapCtxProvider = ({ children }) => {
     duration,
     distance,
     closeBottomSheet,
+    markers,
+    setMarkers,
   }
 
   return <MapCtx.Provider value={valueProps}>{children}</MapCtx.Provider>
@@ -101,6 +104,8 @@ export function useMapContext() {
     distance,
     bottomSheetRef,
     closeBottomSheet,
+    markers,
+    setMarkers,
   } = useContext(MapCtx)
   return {
     onPlaceSelected,
@@ -111,5 +116,7 @@ export function useMapContext() {
     distance,
     bottomSheetRef,
     closeBottomSheet,
+    markers,
+    setMarkers,
   }
 }
