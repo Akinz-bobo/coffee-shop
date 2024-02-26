@@ -1,4 +1,4 @@
-import React from "react"
+import React, { memo } from "react"
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 import colors from "../utils/colors"
 import { FontAwesome } from "@expo/vector-icons"

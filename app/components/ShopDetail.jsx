@@ -48,7 +48,7 @@ export default function ShopDetail({ route }) {
     getBusinessDetails(route?.params?.id)
   }, [])
   if (!shop) return
-  console.log(shop.coordinates)
+  // console.log(shop.coordinates)
   function extractServices(array) {
     const services = []
     for (let i = 0; i < array.length; i++) {
@@ -99,8 +99,10 @@ export default function ShopDetail({ route }) {
             <FontAwesome name="coffee" size={24} color={colors.primary} />
           </View>
           <TouchableOpacity onPress={onPressHandler} style={styles.button}>
-            <AntDesign name="enviromento" size={24} color={colors.light} />
-            <Text style={styles.text}>Direction</Text>
+            <AntDesign name="enviromento" size={24} color={colors.primary} />
+            <Text style={[styles.text, { color: colors.primary }]}>
+              Direction
+            </Text>
           </TouchableOpacity>
         </View>
         <View style={[styles.wraper, { marginBottom: 10 }]}>
@@ -160,7 +162,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: "row",
     width: 110,
-    borderColor: colors.light,
+    borderColor: colors.primary,
     borderRadius: 10,
     borderWidth: 1,
     padding: 10,

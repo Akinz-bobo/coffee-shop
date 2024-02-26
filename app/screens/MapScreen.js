@@ -7,6 +7,7 @@ import MapViewDirections from "react-native-maps-directions"
 import AppBottomSheet from "../components/AppBottomSheet"
 import { useMapContext } from "../contexts/MapCtx"
 import AppMarker from "../components/AppMarker"
+import AppCallout from "../components/AppCallout"
 // import BottomSheet from "@gorhom/bottom-sheet"
 
 // https://docs.expo.dev/versions/latest/sdk/map-view/
@@ -16,7 +17,7 @@ import AppMarker from "../components/AppMarker"
 const { width, height } = Dimensions.get("window")
 
 const ASPECT_RATIO = width / height
-const LATITUDE_DELTA = 0.02
+const LATITUDE_DELTA = 0.0087
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 const INITIAL_POSITION = {
   latitude: 40.76711,
@@ -64,14 +65,14 @@ export default function MapScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <MapView
-        showsUserLocation
-        mapType="mutedStandard "
+        // showsUserLocation
+        // mapType="hybrid"
         ref={mapRef}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
-        initialRegion={INITIAL_POSITION}
-        showsMyLocationButton
-        // showsIndoors
+        region={INITIAL_POSITION}
+        showsBuildings={true}
+        showsIndoors={true}
       >
         {origin && <Marker coordinate={origin} />}
         {destination && <Marker coordinate={destination} />}
@@ -88,16 +89,13 @@ export default function MapScreen({ navigation }) {
         {markers.map((marker, ind) => (
           <Marker
             key={ind}
-            coordinate={marker}
-            title={marker.title}
-            image={require("../assets/g2.png")}
-            style={{ height: 60, width: 60, borderRadius: "50%" }}
+            coordinate={{
+              longitude: marker.longitude,
+              latitude: marker.latitude,
+            }}
           >
-            <Callout>
-              <View>
-                <Text>{marker.title}</Text>
-              </View>
-            </Callout>
+            <AppMarker />
+            <AppCallout item={marker} />
           </Marker>
         ))}
       </MapView>

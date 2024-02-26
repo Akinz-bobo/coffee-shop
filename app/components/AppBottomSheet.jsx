@@ -4,7 +4,7 @@ import BottomSheet, {
   BottomSheetFlatList,
   BottomSheetTextInput,
 } from "@gorhom/bottom-sheet"
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import colors from "../utils/colors"
 import axios from "axios"
 import { KEY } from "../../environment"
@@ -15,10 +15,7 @@ import { useMapContext } from "../contexts/MapCtx"
 
 const { width, height } = Dimensions.get("window")
 
-const ASPECT_RATIO = width / height
-const LATITUDE_DELTA = 0.02
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
-export default function AppBottomSheet({ navitation }) {
+function AppBottomSheet({ navitation }) {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState([])
   const [offset, setOffset] = useState(0)
@@ -45,14 +42,13 @@ export default function AppBottomSheet({ navitation }) {
           },
         }
       )
-      console.log(response.data.businesses[0].coordinates)
+      // console.log(response.data.businesses[0].coordinates)
       setData(previous => [...previous, ...response.data.businesses])
       let placesOfInterest = response.data.businesses.map(business => {
         let place = {
           title: business.name,
+          image_url: business.image_url,
           ...business.coordinates,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
         }
         return place
       })
@@ -67,15 +63,11 @@ export default function AppBottomSheet({ navitation }) {
     }
   }
 
-  // console.log(data[0])
   function loadMoreShops() {
     searchBusiness("Cafés & Coffee Shops", "San Francisco, CA")
     setOffset(prev => prev + 50)
   }
 
-  // ref
-
-  // variables
   const snapPoints = useMemo(() => ["25%", "90%"])
 
   const renderBackdrop = useCallback(
@@ -126,6 +118,8 @@ export default function AppBottomSheet({ navitation }) {
     </BottomSheet>
   )
 }
+
+export default AppBottomSheet
 const styles = StyleSheet.create({
   loading: {
     marginTop: 15,
