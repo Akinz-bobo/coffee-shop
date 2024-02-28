@@ -12,30 +12,57 @@ import { useGetOrigin, useGetShops } from "../hooks/fetch"
 import Suggestions from "../components/Suggestions"
 import Loading from "../assets/lottie/Loading"
 import TextButton from "../components/TextButton"
-
-export default function HomeScreen({ navigation }) {
-  const [modalVisible, setModalVisible] = useState()
-  const { getShops, shops } = useGetShops()
-  const { getorigin, origin } = useGetOrigin()
+import axios from "axios"
+import { KEY } from "../../environment"
+export default function HomeScreen({ navigation, route }) {
+  const { shops, origins: origin } = route.params
+  const [modalVisible, setModalVisible] = useState(false)
+  // const { shops } = useGetShops()
+  // const { origin } = useGetOrigin()
   const [searchText, setSearchText] = useState("")
-
+  const [searching, setSearching] = useState(false)
   const [shopData, setShopData] = useState([])
-  const filterShop = useCallback(() => {
+  const filterShop = async () => {
+    console.log(searchText)
     if (searchText.length > 0) {
-      setShopData(al =>
-        shops.filter(v =>
-          v.shop_name.toLowerCase().includes(searchText.toLowerCase())
+      // setShopData(al =>
+      //   shops.filter(v =>
+      //     v.shop_name.toLowerCase().includes(searchText.toLowerCase())
+      //   )
+      // )
+      try {
+        console.log("pressed")
+        setSearching(true)
+        const location = "San Francisco, CA"
+        const term = searchText + " Coffee Shop"
+        const response = await axios.get(
+          ` https://api.yelp.com/v3/businesses/search?sort_by=best_match&limit=10`,
+          {
+            headers: {
+              Authorization: `Bearer ${KEY.YELP_API_KEY}`,
+            },
+            params: {
+              term,
+              location,
+            },
+          }
         )
-      )
+        // console.log(response.data.businesses)
+        setShopData(val => response.data.businesses)
+      } catch (error) {
+        console.log(error.message)
+      }
+      setSearching(false)
       return
     }
-    setShopData(shops)
-  }, [searchText, shops.length])
-  useEffect(() => {
-    filterShop()
-  }, [shops.length])
+  }
+  // console.log(shopData)
+  // useEffect(() => {
+  //   filterShop()
+  // }, [shops.length])
 
   const searchHandler = () => {
+    console.log("pressed handler")
     filterShop()
   }
 
@@ -49,29 +76,45 @@ export default function HomeScreen({ navigation }) {
           <AppText title="Find the best coffee for you" variant="bold" />
 
           <AppTextInput
-            onChange={setSearchText}
+            onChange={e =>
+              setSearchText(val => {
+                if (e.length === 0) {
+                  setShopData(v => [])
+                }
+                return e
+              })
+            }
             value={searchText}
             onModal={setModalVisible}
             searchHandler={searchHandler}
+            isSearching={searching}
           />
 
           <View style={styles.textInputContainer}>
             {/* <Filter /> */}
-            {modalVisible && (
-              <GradientWrapper
-                modalVisible={modalVisible}
+            {searchText.length > 0 && shopData.length > 0 && (
+              <View
                 style={{
-                  paddingLeft: 10,
-                  width: "95%",
-                  position: "absolute",
-                  zIndex: 10,
-                  backgroundColor: colors.dark,
+                  height: 350,
+                  flex: 1,
+                  width: "100%",
                 }}
               >
-                <Suggestions shops={shopData} />
-              </GradientWrapper>
+                <GradientWrapper
+                  modalVisible={searchText.length > 0 && shopData.length > 0}
+                  style={{
+                    paddingLeft: 10,
+                    flex: 1,
+                    position: "absolute",
+                    zIndex: 10,
+                    backgroundColor: colors.dark,
+                  }}
+                >
+                  <Suggestions shops={shopData} />
+                </GradientWrapper>
+              </View>
             )}
-            {!modalVisible && (
+            {!shopData.length > 0 && (
               <View>
                 <AppText title={"Origin"} style={{ marginBottom: 16 }} />
 
@@ -91,7 +134,7 @@ export default function HomeScreen({ navigation }) {
                     )}
                   />
                 ) : (
-                  <Loading />
+                  !origin.length > 0 && <Loading />
                 )}
               </View>
             )}
@@ -102,10 +145,10 @@ export default function HomeScreen({ navigation }) {
                 style={{ marginBottom: 16 }}
               />
 
-              {shopData.length > 0 ? (
+              {shops.length > 0 ? (
                 <FlatList
                   horizontal
-                  data={shopData}
+                  data={shops}
                   keyExtractor={(data, i) => data._id.toString() + i}
                   renderItem={({ item, index }) => (
                     <GradientCard
@@ -122,7 +165,7 @@ export default function HomeScreen({ navigation }) {
                   )}
                 />
               ) : (
-                <Loading />
+                !shops.length > 0 && <Loading />
               )}
             </View>
           </View>
@@ -148,5 +191,6 @@ const styles = StyleSheet.create({
   textInputContainer: {
     flex: 1,
     gap: 20,
+    // height: "100%",
   },
 })

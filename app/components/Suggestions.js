@@ -2,28 +2,45 @@ import { View, Text, StyleSheet } from "react-native"
 import React from "react"
 import { useGetShops } from "../hooks/fetch"
 import colors from "../utils/colors"
-
+import { TouchableOpacity } from "@gorhom/bottom-sheet"
+import { useNavigation } from "@react-navigation/native"
+import axios from "axios"
 export default function Suggestions({ shops }) {
+  const nav = useNavigation()
+  // console.log(shops)
   return (
-    <View style={{ paddingTop: 15, paddingRight: 15 }}>
+    <View style={{ paddingTop: 15, paddingRight: 15, gap: 10 }}>
       {shops.map(item => (
-        <View key={item._id} style={styles.item}>
-          <Text style={styles.shop_name}>{item.shop_name}</Text>
+        <TouchableOpacity
+          onPress={e => {
+            // try {
+            //   const detailedData = await axios.get(
+            //     "https://api.yelp.com/v3/businesses/" + item.id
+            //   )
+            nav.navigate("DetailedScreen", { id: item.id })
+            // } catch (e) {}
+          }}
+          key={item.id}
+          style={styles.item}
+        >
+          <Text style={styles.shop_name}>{item.name}</Text>
           <View style={styles.text}>
             <View style={styles.text}>
-              <Text style={{ color: colors.light, fontSize: 10 }}>123,4</Text>
+              <Text style={{ color: colors.light, fontSize: 10 }}>
+                {Math.floor(item.distance)}
+              </Text>
               <Text style={{ color: colors.primary, fontSize: 10 }}>KM</Text>
             </View>
             <View style={styles.text}>
               <Text style={{ color: colors.light, fontSize: 10 }}>
-                Works Till
+                {item.phone}
               </Text>
               <Text style={{ color: colors.light, fontSize: 10 }}>
-                {item.closing_hour}
+                {item.rating}
               </Text>
             </View>
           </View>
-        </View>
+        </TouchableOpacity>
       ))}
     </View>
   )
@@ -35,6 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
+    marginBottom: 2,
   },
   shop_name: {
     fontWeight: "600",

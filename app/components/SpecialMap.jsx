@@ -15,7 +15,7 @@ import { useEffect, useState } from "react"
 const { width, height } = Dimensions.get("window")
 
 const ASPECT_RATIO = width / height
-const LATITUDE_DELTA = 0.01
+const LATITUDE_DELTA = 0.1
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 export default function SpecialMap({ navigation }) {
   const {
@@ -27,6 +27,7 @@ export default function SpecialMap({ navigation }) {
     markers,
   } = useSpecialMapContext()
 
+  console.log("Origin:", origin, "Destination:", destination)
   return (
     <View style={styles.container}>
       <MapView
@@ -46,7 +47,11 @@ export default function SpecialMap({ navigation }) {
         showsIndoors={true}
       >
         {origin && <Marker coordinate={origin} />}
-        {destination && <Marker coordinate={destination} />}
+        {destination && (
+          <Marker coordinate={destination}>
+            <AppMarker />
+          </Marker>
+        )}
         {showDirections && origin && destination && (
           <MapViewDirections
             origin={origin}

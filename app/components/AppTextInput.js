@@ -9,6 +9,7 @@ export default function AppTextInput({
   searchText,
   onModal,
   searchHandler,
+  isSearching,
 }) {
   const handleChange = ({ nativeEvent: { text } }) => {
     if (text) {
@@ -32,9 +33,9 @@ export default function AppTextInput({
   }
 
   // Function to handle the debounced search
-  const handleDebouncedSearch = debounce(text => {
-    onChange(text)
-  }, 300)
+  // const handleDebouncedSearch = debounce(text => {
+  //   onChange(text)
+  // }, 300)
 
   return (
     <View style={styles.constainer}>
@@ -48,12 +49,13 @@ export default function AppTextInput({
         placeholder="Find Your Coffee..."
         style={styles.input}
         placeholderTextColor={colors.light}
-        onChangeText={text => handleDebouncedSearch(text)}
+        // onChangeText={text => handleDebouncedSearch(text)}
         value={searchText}
-        onChange={handleChange}
+        onChangeText={onChange}
+        // onChange={handleChange}
       />
       <TextButton
-        title="Search"
+        title={isSearching ? "Searching..." : "Search"}
         onPress={searchHandler}
         style={{
           borderRadius: 5,

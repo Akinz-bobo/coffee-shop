@@ -6,12 +6,12 @@ export default function GradientWrapper({ children, modalVisible, style }) {
   return (
     <>
       {modalVisible && (
-        <View>
+        <View style={style}>
           <LinearGradient
             colors={["rgba(38, 43, 51, 0.70)", "#252A32"]}
             locations={[0.4, 1]}
             start={{ x: 0.1, y: 0.2 }}
-            style={[styles.container, style]}
+            style={[styles.container]}
           >
             {children}
           </LinearGradient>
@@ -23,11 +23,10 @@ export default function GradientWrapper({ children, modalVisible, style }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: "90%",
     borderRadius: 10,
     paddingLeft: 20,
     paddingBottom: 20,
-    height: 350,
+    minHeight: 350,
     maxHeight: 350,
     flex: 1,
     overflow: "scroll",

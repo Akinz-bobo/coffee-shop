@@ -3,17 +3,15 @@ import { SafeAreaProvider } from "react-native-safe-area-context"
 import { View, Animated, Easing, StyleSheet } from "react-native"
 import LottieView from "lottie-react-native"
 import * as SplashScreen from "expo-splash-screen"
-import Application from "./app/components/Application"
-import { useGetData, useGetOrigin, useGetShops } from "./app/hooks/fetch"
-const LOTTI_JSON = require("./app/assets/lottie/splash.json")
+
+const LOTTI_JSON = require("./assets/splash.json")
 
 SplashScreen.preventAutoHideAsync()
-export default function App() {
+export default function SplashScreen() {
   const animationProgress = useRef(new Animated.Value(0))
   const [isLayoutReady, setLayoutReady] = useState(false)
   const [isAppReady, setAppReady] = useState(false)
-  const { isReady, shops, origins } = useGetData()
-  // console.log(shops)
+
   useEffect(() => {
     Animated.loop(
       Animated.timing(animationProgress.current, {
@@ -24,14 +22,8 @@ export default function App() {
       })
     ).start()
   }, [])
-  const onApplicationReady = useCallback(async () => {
-    //make api request to
-    try {
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setAppReady(true)
-    }
+  const onApplicationReady = useCallback(() => {
+    setAppReady(true)
   }, [])
   const onLayout = useCallback(async () => {
     try {
@@ -45,13 +37,7 @@ export default function App() {
   const showAnimation = !(isAppReady && isLayoutReady && isReady)
   return (
     <SafeAreaProvider>
-      {isReady && (
-        <Application
-          onReady={onApplicationReady}
-          shops={shops}
-          origins={origins}
-        />
-      )}
+      {isReady && <Application onReady={onApplicationReady} />}
       {showAnimation && (
         <View
           pointerEvents="none"
@@ -60,8 +46,9 @@ export default function App() {
         >
           <LottieView
             style={{
-              flex: 1,
-              // backgroundColor: "green",
+              width: 200,
+              height: 200,
+              backgroundColor: "green",
             }}
             source={LOTTI_JSON}
             progress={animationProgress.current}

@@ -3,9 +3,8 @@ import React from "react"
 import { Callout } from "react-native-maps"
 import colors from "../utils/colors"
 export default function AppCallout({ item }) {
-  //   console.log(item)
   return (
-    <Callout tooltip={false}>
+    <Callout tooltip={false} style={styles.callout}>
       <View style={styles.callout}>
         <Text style={styles.text}>{item.title}</Text>
       </View>
@@ -15,12 +14,9 @@ export default function AppCallout({ item }) {
 
 const styles = StyleSheet.create({
   callout: {
-    // flex: 1,
-    // maxWidth: 400,
-    height: 40,
-    backgroundColor: "white",
+    width: 300,
+    height: 50,
     borderRadius: 10,
-    padding: 5,
     alignItems: "center",
     justifyContent: "center",
   },

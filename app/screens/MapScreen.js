@@ -1,6 +1,5 @@
 import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps"
 import { StyleSheet, View, Dimensions, Text } from "react-native"
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete"
 import { KEY } from "..//../environment"
 import Constants from "expo-constants"
 import MapViewDirections from "react-native-maps-directions"
@@ -8,7 +7,6 @@ import AppBottomSheet from "../components/AppBottomSheet"
 import { useMapContext } from "../contexts/MapCtx"
 import AppMarker from "../components/AppMarker"
 import AppCallout from "../components/AppCallout"
-// import BottomSheet from "@gorhom/bottom-sheet"
 
 // https://docs.expo.dev/versions/latest/sdk/map-view/
 // https://www.npmjs.com/package/react-native-google-places-autocomplete
@@ -26,26 +24,6 @@ const INITIAL_POSITION = {
   longitudeDelta: LONGITUDE_DELTA,
 }
 
-function InputAutocomplete({ label, placeholder, onPlaceSelected }) {
-  return (
-    <>
-      <Text>{label}</Text>
-      <GooglePlacesAutocomplete
-        styles={{ textInput: styles.input }}
-        placeholder={placeholder || ""}
-        fetchDetails
-        onPress={(data, details = null) => {
-          onPlaceSelected(details)
-        }}
-        query={{
-          key: KEY.GOOGLE_API_KEY,
-          language: "pt-BR",
-        }}
-      />
-    </>
-  )
-}
-
 export default function MapScreen({ navigation }) {
   const {
     origin,
@@ -55,18 +33,9 @@ export default function MapScreen({ navigation }) {
     mapRef,
     markers,
   } = useMapContext()
-
-  const locationsOfInterest = []
-  // const showLocationsOfInterest = () => {
-  //   return markers.map((item, index) => (
-  //     <AppMarker key={index} coordinate={item.location} title={item.name} />
-  //   ))
-  // }
   return (
     <View style={styles.container}>
       <MapView
-        // showsUserLocation
-        // mapType="hybrid"
         ref={mapRef}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
@@ -93,6 +62,7 @@ export default function MapScreen({ navigation }) {
               longitude: marker.longitude,
               latitude: marker.latitude,
             }}
+            style={{ flex: 1, alignItems: "center" }}
           >
             <AppMarker />
             <AppCallout item={marker} />

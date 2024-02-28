@@ -11,7 +11,7 @@ export const MapCtx = createContext()
 
 const SpecialMapCtxProvider = ({ children }) => {
   const [origin, setOrigin] = useState({ latitude: 0, longitude: 0 })
-  const [destination, setDestination] = useState(null)
+  const [destination, setDestination] = useState()
   const [showDirections, setShowDirections] = useState(false)
   const [distance, setDistance] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -70,16 +70,18 @@ const SpecialMapCtxProvider = ({ children }) => {
   }
 
   const onPlaceSelected = location => {
-    console.log(location)
+    console.log("LOC", location)
     setDestination(location)
     moveTo(location)
     traceRoute()
   }
+  console.log(destination)
   const valueProps = {
     onPlaceSelected,
     SpecialMapRef,
     traceRouteOnReady,
     showDirections,
+    destination,
     duration,
     distance,
     markers,
@@ -99,6 +101,7 @@ export function useSpecialMapContext() {
     showDirections,
     duration,
     distance,
+    destination,
     markers,
     setMarkers,
     origin,
@@ -110,6 +113,7 @@ export function useSpecialMapContext() {
     showDirections,
     duration,
     distance,
+    destination,
     markers,
     setMarkers,
     origin,

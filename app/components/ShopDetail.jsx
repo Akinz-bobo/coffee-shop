@@ -37,7 +37,8 @@ export default function ShopDetail({ route }) {
           },
         }
       )
-      //   console.log("Detail:", response.data)
+      console.log("Detail:")
+      onPlaceSelected(response.data.coordinates)
       setShop(response.data)
     } catch (error) {
       console.log(error)
@@ -59,8 +60,9 @@ export default function ShopDetail({ route }) {
   }
 
   const onPressHandler = () => {
-    navigation.goBack()
     onPlaceSelected(shop.coordinates)
+    // const destination = shop.coordinates
+    navigation.navigate("MapScreen")
     closeBottomSheet()
   }
   return (

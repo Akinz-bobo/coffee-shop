@@ -7,7 +7,8 @@ import ShopNavigator from "./ShopNavation"
 import { useFavouriteCtx } from "../contexts/FavouritesCtx"
 const Tab = createBottomTabNavigator()
 
-export default AppTabs = () => {
+export default AppTabs = ({ shops, origins }) => {
+  // console.log(shops)
   const { fav } = useFavouriteCtx()
   return (
     <Tab.Navigator
@@ -42,6 +43,7 @@ export default AppTabs = () => {
       <Tab.Screen
         options={{ tabBarShowLabel: false }}
         name="Home"
+        initialParams={{ shops, origins }}
         component={AppNavigator}
       />
       <Tab.Screen

@@ -75,6 +75,7 @@ const MapCtxProvider = ({ children }) => {
   }
 
   const closeBottomSheet = () => {
+    if (!bottomSheetRef.current) return
     bottomSheetRef.current.snapToIndex(0)
   }
   const valueProps = {
