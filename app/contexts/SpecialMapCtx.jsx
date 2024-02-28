@@ -25,9 +25,10 @@ const SpecialMapCtxProvider = ({ children }) => {
       return
     }
     let location = await Location.getCurrentPositionAsync({})
+    const address = await Location.reverseGeocodeAsync(location.coords)
     setOrigin({
-      latitude: location.coords.longitude,
-      longitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+      latitude: location.coords.latitude,
     })
   }
   useEffect(() => {
@@ -69,6 +70,7 @@ const SpecialMapCtxProvider = ({ children }) => {
   }
 
   const onPlaceSelected = location => {
+    console.log(location)
     setDestination(location)
     moveTo(location)
     traceRoute()

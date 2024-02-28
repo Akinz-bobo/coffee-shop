@@ -30,10 +30,10 @@ export default function ShopDetailScreen({ route }) {
   const navigation = useNavigation()
   const onPressHandler = () => {
     navigation.navigate("SpecialMap")
-    // onPlaceSelected({
-    //   latitude: shop.lat,
-    //   longitude: shop.long,
-    // })
+    onPlaceSelected({
+      latitude: shop.lat,
+      longitude: shop.long,
+    })
   }
   return (
     <Screen style={styles.screen}>

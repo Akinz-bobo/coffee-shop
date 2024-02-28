@@ -6,6 +6,7 @@ import MapViewDirections from "react-native-maps-directions"
 import AppMarker from "../components/AppMarker"
 import AppCallout from "../components/AppCallout"
 import { useSpecialMapContext } from "../contexts/SpecialMapCtx"
+import { useEffect, useState } from "react"
 
 // https://docs.expo.dev/versions/latest/sdk/map-view/
 // https://www.npmjs.com/package/react-native-google-places-autocomplete
@@ -14,9 +15,8 @@ import { useSpecialMapContext } from "../contexts/SpecialMapCtx"
 const { width, height } = Dimensions.get("window")
 
 const ASPECT_RATIO = width / height
-const LATITUDE_DELTA = 0.001
+const LATITUDE_DELTA = 0.01
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
-
 export default function SpecialMap({ navigation }) {
   const {
     origin,
@@ -27,22 +27,20 @@ export default function SpecialMap({ navigation }) {
     markers,
   } = useSpecialMapContext()
 
-  const INITIAL_POSITION = {
-    latitude: origin.latitude,
-    longitude: origin.longitude,
-    latitudeDelta: LATITUDE_DELTA,
-    longitudeDelta: LONGITUDE_DELTA,
-  }
-  console.log("Origin", INITIAL_POSITION)
   return (
     <View style={styles.container}>
       <MapView
         showsUserLocation
-        // mapType="hybrid"
+        // mapType="hybrid"/
         ref={SpecialMapRef}
         style={styles.map}
         provider={PROVIDER_GOOGLE}
-        // region={INITIAL_POSITION}
+        region={{
+          longitude: origin.longitude,
+          latitude: origin.latitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        }}
         // initialRegion={INITIAL_POSITION}
         showsBuildings={true}
         showsIndoors={true}
