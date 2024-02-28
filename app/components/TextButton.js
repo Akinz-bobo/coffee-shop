@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
+import { StyleSheet, Text, TouchableOpacity } from "react-native"
 
 import React from "react"
 
@@ -19,13 +19,13 @@ export default function TextButton({
           backgroundColor: background ? colors[background] : colors.medium,
           borderWidth: active ? 1 : 0,
         },
+        style,
       ]}
       onPress={onPress}
     >
       <Text
         style={[
           styles.title,
-          style,
           { color: active ? colors.primary : colors.white },
         ]}
       >
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: "center",
-    fontSize: 20,
+    fontSize: 16,
     color: colors.light,
   },
 })

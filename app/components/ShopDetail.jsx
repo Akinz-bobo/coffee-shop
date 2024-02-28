@@ -62,17 +62,6 @@ export default function ShopDetail({ route }) {
     navigation.goBack()
     onPlaceSelected(shop.coordinates)
     closeBottomSheet()
-    mapRef.current.animateCamera(
-      {
-        center: {
-          ...shop.coordinates,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        },
-        zoom: 10,
-      },
-      { duration: 3000 }
-    )
   }
   return (
     <ScrollView contentContainerStyle={styles.container}>

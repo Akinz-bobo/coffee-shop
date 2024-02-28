@@ -4,12 +4,12 @@ import {
   TouchableOpacity,
   View,
   Linking,
+  Dimensions,
 } from "react-native"
 import React from "react"
 import Screen from "../components/Screen"
 import Logo from "../components/Logo"
 import AppText from "../components/AppText"
-import TextButton from "../components/TextButton"
 import IconButton from "../components/IconButton"
 import colors from "../utils/colors"
 import Gallery from "../components/Gallery"
@@ -17,14 +17,24 @@ import { AntDesign } from "@expo/vector-icons"
 import Menu from "../components/Menu"
 import { useFavouritesStore } from "../hooks/localStorage"
 import { useFavouriteCtx } from "../contexts/FavouritesCtx"
-// import { togglFavouriteStore } from "../utils/storageFunctions"
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import TextButton from "../components/TextButton"
+import { useSpecialMapContext } from "../contexts/SpecialMapCtx"
+import { useNavigation } from "@react-navigation/native"
 
 export default function ShopDetailScreen({ route }) {
   const shop = route.params
+  // console.log(shop)
   const { fav, toggleFavouriteStore } = useFavouritesStore(shop._id)
   const { getFav } = useFavouriteCtx()
-  // console.log(shop)
+  const { onPlaceSelected, SpecialMapRef } = useSpecialMapContext()
+  const navigation = useNavigation()
+  const onPressHandler = () => {
+    navigation.navigate("SpecialMap")
+    // onPlaceSelected({
+    //   latitude: shop.lat,
+    //   longitude: shop.long,
+    // })
+  }
   return (
     <Screen style={styles.screen}>
       <ScrollView>
@@ -45,7 +55,13 @@ export default function ShopDetailScreen({ route }) {
             </View>
           </View>
           <View style={styles.btnContainer}>
-            <TextButton title="Direction" />
+            <TextButton
+              onPress={onPressHandler}
+              title="Direction"
+              style={{
+                borderRadius: 5,
+              }}
+            />
             <IconButton
               onPress={async e => {
                 await toggleFavouriteStore(shop)
@@ -54,14 +70,9 @@ export default function ShopDetailScreen({ route }) {
               color={fav && "red"}
               icon="heart"
             />
-            {/* <IconButton icon="sharealt" /> */}
           </View>
           <View style={styles.description}>
-            <AppText
-              title={shop.description}
-              // title="Deep within the challenges we face, lies the fertile ground for groundbreaking business ideas to blossom and thrive"
-              style={{ fontSize: 14 }}
-            />
+            <AppText title={shop.description} style={{ fontSize: 14 }} />
           </View>
           <Gallery
             cover_image={shop.cover_image[0]}

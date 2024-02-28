@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, StyleSheet, View } from "react-native"
+import { Button, FlatList, ScrollView, StyleSheet, View } from "react-native"
 import React, { useCallback, useEffect, useState } from "react"
 import Screen from "../components/Screen"
 import colors from "../utils/colors"
@@ -11,6 +11,7 @@ import AppText from "../components/AppText"
 import { useGetOrigin, useGetShops } from "../hooks/fetch"
 import Suggestions from "../components/Suggestions"
 import Loading from "../assets/lottie/Loading"
+import TextButton from "../components/TextButton"
 
 export default function HomeScreen({ navigation }) {
   const [modalVisible, setModalVisible] = useState()
@@ -32,12 +33,12 @@ export default function HomeScreen({ navigation }) {
   }, [searchText, shops.length])
   useEffect(() => {
     filterShop()
-  }, [searchText, shops.length])
+  }, [shops.length])
 
-  // const filteredShopData = shopData.filter(shop =>
-  //   shop.shop_name.toLowerCase().includes(searchText.toLowerCase())
-  // )
-  // console.log(filteredShopData.length)
+  const searchHandler = () => {
+    filterShop()
+  }
+
   const dummyShopCover =
     "https://media.gettyimages.com/id/1428594094/photo/empty-coffee-shop-interior-with-wooden-tables-coffee-maker-pastries-and-pendant-lights.jpg?s=612x612&w=gi&k=20&c=Tu0dyFuw3p1UDS_I19ifEvqOxPqWzLKqIx0S-6uYCqA="
   return (
@@ -46,14 +47,16 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.screen}>
           <Logo />
           <AppText title="Find the best coffee for you" variant="bold" />
+
           <AppTextInput
             onChange={setSearchText}
             value={searchText}
             onModal={setModalVisible}
+            searchHandler={searchHandler}
           />
 
           <View style={styles.textInputContainer}>
-            <Filter />
+            {/* <Filter /> */}
             {modalVisible && (
               <GradientWrapper
                 modalVisible={modalVisible}
@@ -68,9 +71,10 @@ export default function HomeScreen({ navigation }) {
                 <Suggestions shops={shopData} />
               </GradientWrapper>
             )}
-
             {!modalVisible && (
               <View>
+                <AppText title={"Origin"} style={{ marginBottom: 16 }} />
+
                 {origin.length > 0 ? (
                   <FlatList
                     horizontal
@@ -91,7 +95,13 @@ export default function HomeScreen({ navigation }) {
                 )}
               </View>
             )}
+
             <View>
+              <AppText
+                title={"Speciality Coffee"}
+                style={{ marginBottom: 16 }}
+              />
+
               {shopData.length > 0 ? (
                 <FlatList
                   horizontal
