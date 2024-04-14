@@ -76,7 +76,7 @@ const GradientCard = ({
                 <FontAwesome
                   name={icon}
                   size={24}
-                  color={favorite ? colors.red : colors.white}
+                  color={favorite ? colors.primary : colors.white}
                 />
                 {/* </TouchableOpacity> */}
               </LinearGradient>

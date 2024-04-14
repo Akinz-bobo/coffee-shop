@@ -61,7 +61,6 @@ const MapCtxProvider = ({ children }) => {
   }
 
   const traceRouteOnReady = args => {
-    console.log(args)
     if (args) {
       setDistance(args.distance)
       setDuration(args.duration)

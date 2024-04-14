@@ -1,73 +1,61 @@
-import { Button, FlatList, ScrollView, StyleSheet, View } from "react-native"
-import React, { useCallback, useEffect, useState } from "react"
+import { FlatList, ScrollView, StyleSheet, View } from "react-native"
+import React, { useEffect, useState } from "react"
 import Screen from "../components/Screen"
 import colors from "../utils/colors"
 import AppTextInput from "../components/AppTextInput"
-import Filter from "../components/Filter"
 import GradientCard from "../components/GradientCard"
 import GradientWrapper from "../components/GradientWrapper"
 import Logo from "../components/Logo"
 import AppText from "../components/AppText"
-import { useGetOrigin, useGetShops } from "../hooks/fetch"
 import Suggestions from "../components/Suggestions"
 import Loading from "../assets/lottie/Loading"
-import TextButton from "../components/TextButton"
 import axios from "axios"
 import { KEY } from "../../environment"
 export default function HomeScreen({ navigation, route }) {
   const { shops, origins: origin } = route.params
-  const [modalVisible, setModalVisible] = useState(false)
-  // const { shops } = useGetShops()
-  // const { origin } = useGetOrigin()
   const [searchText, setSearchText] = useState("")
   const [searching, setSearching] = useState(false)
   const [shopData, setShopData] = useState([])
-  const filterShop = async () => {
-    console.log(searchText)
-    if (searchText.length > 0) {
-      // setShopData(al =>
-      //   shops.filter(v =>
-      //     v.shop_name.toLowerCase().includes(searchText.toLowerCase())
-      //   )
-      // )
-      try {
-        console.log("pressed")
-        setSearching(true)
-        const location = "San Francisco, CA"
-        const term = searchText + " Coffee Shop"
-        const response = await axios.get(
-          ` https://api.yelp.com/v3/businesses/search?sort_by=best_match&limit=10`,
-          {
-            headers: {
-              Authorization: `Bearer ${KEY.YELP_API_KEY}`,
-            },
-            params: {
-              term,
-              location,
-            },
-          }
-        )
-        // console.log(response.data.businesses)
-        setShopData(val => response.data.businesses)
-      } catch (error) {
-        console.log(error.message)
-      }
-      setSearching(false)
-      return
+
+  function debounce(func, timeout = 500) {
+    let timer
+    return (...args) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+        func.apply(this, args)
+      }, timeout)
     }
   }
-  // console.log(shopData)
-  // useEffect(() => {
-  //   filterShop()
-  // }, [shops.length])
-
-  const searchHandler = () => {
-    console.log("pressed handler")
-    filterShop()
+  async function saveInput(value) {
+    // make API call
+    if (value === "") {
+      return setShopData([])
+    }
+    try {
+      setSearching(true)
+      const location = "San Francisco, CA"
+      const term = value + " Coffee Shop"
+      const response = await axios.get(
+        ` https://api.yelp.com/v3/businesses/search?sort_by=best_match&limit=10`,
+        {
+          headers: {
+            Authorization: `Bearer ${KEY.YELP_API_KEY}`,
+          },
+          params: {
+            term,
+            location,
+          },
+        }
+      )
+      setShopData(val => response.data.businesses)
+    } catch (error) {
+      console.log(error.message)
+    }
+    setSearching(false)
+    return
   }
+  const processChange = debounce(val => saveInput(val))
 
-  const dummyShopCover =
-    "https://media.gettyimages.com/id/1428594094/photo/empty-coffee-shop-interior-with-wooden-tables-coffee-maker-pastries-and-pendant-lights.jpg?s=612x612&w=gi&k=20&c=Tu0dyFuw3p1UDS_I19ifEvqOxPqWzLKqIx0S-6uYCqA="
   return (
     <Screen style={styles.container}>
       <ScrollView>
@@ -76,23 +64,14 @@ export default function HomeScreen({ navigation, route }) {
           <AppText title="Find the best coffee for you" variant="bold" />
 
           <AppTextInput
-            onChange={e =>
-              setSearchText(val => {
-                if (e.length === 0) {
-                  setShopData(v => [])
-                }
-                return e
-              })
-            }
+            onChange={processChange}
             value={searchText}
-            onModal={setModalVisible}
-            searchHandler={searchHandler}
             isSearching={searching}
           />
 
           <View style={styles.textInputContainer}>
             {/* <Filter /> */}
-            {searchText.length > 0 && shopData.length > 0 && (
+            {shopData.length > 0 && (
               <View
                 style={{
                   height: 350,
@@ -101,7 +80,7 @@ export default function HomeScreen({ navigation, route }) {
                 }}
               >
                 <GradientWrapper
-                  modalVisible={searchText.length > 0 && shopData.length > 0}
+                  modalVisible={shopData.length > 0}
                   style={{
                     paddingLeft: 10,
                     flex: 1,

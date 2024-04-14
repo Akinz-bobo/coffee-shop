@@ -1,11 +1,4 @@
-import {
-  Image,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-  Dimensions,
-} from "react-native"
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native"
 import React, { useEffect, useState } from "react"
 import colors from "../utils/colors"
 import { FontAwesome } from "@expo/vector-icons"
@@ -17,13 +10,8 @@ import { TouchableOpacity } from "@gorhom/bottom-sheet"
 import Constants from "expo-constants"
 import { useMapContext } from "../contexts/MapCtx"
 
-const { width, height } = Dimensions.get("window")
-
-const ASPECT_RATIO = width / height
-const LATITUDE_DELTA = 0.02
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO
 export default function ShopDetail({ route }) {
-  const { onPlaceSelected, closeBottomSheet, mapRef } = useMapContext()
+  const { onPlaceSelected, closeBottomSheet } = useMapContext()
   const navigation = useNavigation()
   const [shop, setShop] = useState(null)
   const WeekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -37,7 +25,6 @@ export default function ShopDetail({ route }) {
           },
         }
       )
-      console.log("Detail:")
       onPlaceSelected(response.data.coordinates)
       setShop(response.data)
     } catch (error) {
@@ -49,7 +36,6 @@ export default function ShopDetail({ route }) {
     getBusinessDetails(route?.params?.id)
   }, [])
   if (!shop) return
-  // console.log(shop.coordinates)
   function extractServices(array) {
     const services = []
     for (let i = 0; i < array.length; i++) {
@@ -61,7 +47,6 @@ export default function ShopDetail({ route }) {
 
   const onPressHandler = () => {
     onPlaceSelected(shop.coordinates)
-    // const destination = shop.coordinates
     navigation.navigate("MapScreen")
     closeBottomSheet()
   }

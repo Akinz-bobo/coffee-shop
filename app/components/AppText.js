@@ -8,7 +8,7 @@ export default function AppText({ title, variant = "small", style, color }) {
       style={[
         styles.text,
         {
-          fontSize: variant === "bold" ? 30 : 16,
+          fontSize: variant === "bold" ? 20 : 16,
           color: color ? colors.primary : colors.white,
         },
         style,

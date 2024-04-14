@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   View,
   Linking,
-  Dimensions,
+  Text,
 } from "react-native"
 import React from "react"
 import Screen from "../components/Screen"
@@ -14,6 +14,7 @@ import IconButton from "../components/IconButton"
 import colors from "../utils/colors"
 import Gallery from "../components/Gallery"
 import { AntDesign } from "@expo/vector-icons"
+import { FontAwesome } from "@expo/vector-icons"
 import Menu from "../components/Menu"
 import { useFavouritesStore } from "../hooks/localStorage"
 import { useFavouriteCtx } from "../contexts/FavouritesCtx"
@@ -23,10 +24,9 @@ import { useNavigation } from "@react-navigation/native"
 
 export default function ShopDetailScreen({ route }) {
   const shop = route.params
-  // console.log(shop)
   const { fav, toggleFavouriteStore } = useFavouritesStore(shop._id)
   const { getFav } = useFavouriteCtx()
-  const { onPlaceSelected, SpecialMapRef } = useSpecialMapContext()
+  const { onPlaceSelected } = useSpecialMapContext()
   const navigation = useNavigation()
   const onPressHandler = () => {
     navigation.navigate("SpecialMap")
@@ -38,48 +38,70 @@ export default function ShopDetailScreen({ route }) {
   return (
     <Screen style={styles.screen}>
       <ScrollView>
-        <View style={{ gap: 20 }}>
-          <Logo icon={true} />
-          <View style={{ marginTop: 10 }}>
-            <AppText title={shop.shop_name} variant="bold" />
-            <View style={styles.textContainer}>
-              <AppText
-                title={`Open at ${shop.opening_hour}`}
-                style={styles.text}
-                color={true}
-              />
-              <AppText
-                title={`Closes at ${shop.closing_hour}`}
-                style={styles.text}
-              />
+        <View style={{ gap: 15 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              width: "90%",
+              justifyContent: "space-between",
+            }}
+          >
+            <View
+              style={[
+                // styles.wraper,
+                {
+                  flexDirection: "row",
+                  gap: 5,
+                  alignItems: "flex-start",
+                  width: "60%",
+                  flexWrap: "wrap",
+                },
+              ]}
+            >
+              <AppText title={shop.shop_name} variant="bold" color={true} />
+              <FontAwesome name="coffee" size={24} color={colors.primary} />
             </View>
+            <TouchableOpacity onPress={onPressHandler} style={styles.button}>
+              <AntDesign name="enviromento" size={24} color={colors.primary} />
+              <Text
+                style={[styles.text, { color: colors.primary, fontSize: 14 }]}
+              >
+                Direction
+              </Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.btnContainer}>
-            <TextButton
-              onPress={onPressHandler}
-              title="Direction"
-              style={{
-                borderRadius: 5,
-              }}
+          <View style={styles.textContainer}>
+            <AppText
+              title={`Open at ${shop.opening_hour}`}
+              style={styles.text}
+              color={true}
             />
-            <IconButton
-              onPress={async e => {
-                await toggleFavouriteStore(shop)
-                getFav()
-              }}
-              color={fav && "red"}
-              icon="heart"
+            <AppText
+              title={`Closes at ${shop.closing_hour}`}
+              style={styles.text}
             />
           </View>
-          <View style={styles.description}>
-            <AppText title={shop.description} style={{ fontSize: 14 }} />
+          {/* Address */}
+          <View style={[styles.wraper, { marginBottom: 10 }]}>
+            <FontAwesome name="map-marker" size={24} color="white" />
+            <Text style={{ color: colors.light }}>
+              Universal location new-jersey London
+            </Text>
           </View>
+
           <Gallery
             cover_image={shop.cover_image[0]}
             image1={shop.images[0]}
             image2={shop.images[1]}
           />
-
+          <View style={styles.description}>
+            <AppText title={"Description"} />
+            <AppText
+              title={shop.description}
+              style={{ fontSize: 14, color: colors.light }}
+            />
+          </View>
           {shop.hasOwnProperty("social_link") ? (
             <View style={styles.container}>
               <AppText title="Instagram" color={true} />
@@ -112,6 +134,16 @@ const styles = StyleSheet.create({
     gap: 20,
     width: "90%",
   },
+  button: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: 110,
+    borderColor: colors.primary,
+    borderRadius: 10,
+    borderWidth: 1,
+    padding: 10,
+    gap: 5,
+  },
   container: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -131,10 +163,16 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   text: {
-    fontSize: 10,
+    fontSize: 12,
   },
   title: {
     flexDirection: "row",
     gap: 10,
+  },
+  wraper: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    width: "85%",
   },
 })

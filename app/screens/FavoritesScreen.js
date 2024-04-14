@@ -1,14 +1,12 @@
-import { FlatList, StyleSheet, Text, View } from "react-native"
-import React, { useEffect, useState } from "react"
-import { useGetShops } from "../hooks/fetch"
+import { StyleSheet, Text, View } from "react-native"
+import React from "react"
 import AppText from "../components/AppText"
 import GradientCard from "../components/GradientCard"
 import Screen from "../components/Screen"
-import { useFavouritesStore } from "../hooks/localStorage"
 import { useFavouriteCtx } from "../contexts/FavouritesCtx"
 
 export default function FavoritesScreen({ navigation }) {
-  const { fav: shops, getFav } = useFavouriteCtx()
+  const { fav: shops } = useFavouriteCtx()
   return (
     <Screen>
       <View style={{ width: "100%" }}>
@@ -59,5 +57,3 @@ export default function FavoritesScreen({ navigation }) {
     </Screen>
   )
 }
-
-const styles = StyleSheet.create({})

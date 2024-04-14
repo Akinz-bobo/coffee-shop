@@ -1,8 +1,7 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View } from "react-native"
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetFlatList,
-  BottomSheetTextInput,
 } from "@gorhom/bottom-sheet"
 import React, { useCallback, useMemo, useState } from "react"
 import colors from "../utils/colors"
@@ -13,8 +12,6 @@ import { Fontisto } from "@expo/vector-icons"
 import Loading from "../assets/lottie/Loading"
 import { useMapContext } from "../contexts/MapCtx"
 
-const { width, height } = Dimensions.get("window")
-
 function AppBottomSheet({ navitation }) {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState([])
@@ -23,7 +20,6 @@ function AppBottomSheet({ navitation }) {
   const { bottomSheetRef, setMarkers } = useMapContext()
   // fetch yelp data
   async function searchBusiness(term, location) {
-    console.log("called")
     if (loading) {
       return
     }

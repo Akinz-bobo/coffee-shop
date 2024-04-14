@@ -1,21 +1,14 @@
 import { ImageBackground, ScrollView, StyleSheet, View } from "react-native"
-import React, { useState } from "react"
+import React from "react"
 import Screen from "../components/Screen"
 import IconsGroup from "../components/IconsGroup"
 import colors from "../utils/colors"
 import AppText from "../components/AppText"
 import Glass from "../components/Glass"
-
 export default function OriginDetailScreen({ route }) {
   const item = route.params
-
-  console.log("OriginDetailScreen:", item)
   const image = item.cover_image[0]
-  const sizes = ["250gm", "500gm", "1000gm"]
-  const [active, setActive] = useState(null)
-  const onPress = index => {
-    setActive(index)
-  }
+
   return (
     <Screen>
       <ScrollView style={{ flex: 1 }}>
@@ -25,7 +18,7 @@ export default function OriginDetailScreen({ route }) {
             style={styles.image}
             source={{ uri: image }}
           >
-            <IconsGroup />
+            {/* <IconsGroup /> */}
             <Glass
               ratings={5}
               origin={item.origin}
@@ -47,7 +40,6 @@ export default function OriginDetailScreen({ route }) {
     </Screen>
   )
 }
-
 const styles = StyleSheet.create({
   container: {
     height: "100%",

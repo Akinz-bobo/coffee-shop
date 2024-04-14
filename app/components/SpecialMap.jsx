@@ -4,9 +4,7 @@ import { KEY } from "..//../environment"
 import Constants from "expo-constants"
 import MapViewDirections from "react-native-maps-directions"
 import AppMarker from "../components/AppMarker"
-import AppCallout from "../components/AppCallout"
 import { useSpecialMapContext } from "../contexts/SpecialMapCtx"
-import { useEffect, useState } from "react"
 
 // https://docs.expo.dev/versions/latest/sdk/map-view/
 // https://www.npmjs.com/package/react-native-google-places-autocomplete

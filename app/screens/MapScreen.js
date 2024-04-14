@@ -1,8 +1,6 @@
-import MapView, { PROVIDER_GOOGLE, Marker, Callout } from "react-native-maps"
-import { StyleSheet, View, Dimensions, Text } from "react-native"
-import { KEY } from "..//../environment"
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps"
+import { StyleSheet, View, Dimensions } from "react-native"
 import Constants from "expo-constants"
-import MapViewDirections from "react-native-maps-directions"
 import AppBottomSheet from "../components/AppBottomSheet"
 import { useMapContext } from "../contexts/MapCtx"
 import AppMarker from "../components/AppMarker"
@@ -25,14 +23,7 @@ const INITIAL_POSITION = {
 }
 
 export default function MapScreen({ navigation }) {
-  const {
-    origin,
-    destination,
-    showDirections,
-    traceRouteOnReady,
-    mapRef,
-    markers,
-  } = useMapContext()
+  const { origin, destination, mapRef, markers } = useMapContext()
   return (
     <View style={styles.container}>
       <MapView
@@ -45,16 +36,7 @@ export default function MapScreen({ navigation }) {
       >
         {origin && <Marker coordinate={origin} />}
         {destination && <Marker coordinate={destination} />}
-        {showDirections && origin && destination && (
-          <MapViewDirections
-            origin={origin}
-            destination={destination}
-            apikey={KEY.GOOGLE_API_KEY}
-            strokeColor="#6644ff"
-            strokeWidth={4}
-            onReady={traceRouteOnReady}
-          />
-        )}
+
         {markers.map((marker, ind) => (
           <Marker
             key={ind}

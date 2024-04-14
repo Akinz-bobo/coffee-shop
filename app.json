@@ -8,7 +8,7 @@
         }
       ]
     ],
-    "name": "DoneWithIt",
+    "name": "coffee-map-africa",
     "slug": "coffee-shop",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,9 +22,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
@@ -37,12 +35,13 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.FOREGROUND_SERVICE"
-      ]
+      ],
+      "package": "com.adeyemoak.coffeeshop"
     },
     "web": {
       "favicon": "./app/assets/favicon.png"
     },
-    "description": "A marketplace for selling the stuff you don't need anymore.",
+    "description": "A place to find all your favorite coffee shops and their origin.",
     "extra": {
       "eas": {
         "projectId": "c840558e-3e9b-4a5b-9ec7-b84eec6932ec"

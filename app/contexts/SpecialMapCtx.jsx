@@ -25,7 +25,6 @@ const SpecialMapCtxProvider = ({ children }) => {
       return
     }
     let location = await Location.getCurrentPositionAsync({})
-    const address = await Location.reverseGeocodeAsync(location.coords)
     setOrigin({
       longitude: location.coords.longitude,
       latitude: location.coords.latitude,
@@ -62,7 +61,6 @@ const SpecialMapCtxProvider = ({ children }) => {
   }
 
   const traceRouteOnReady = args => {
-    console.log(args)
     if (args) {
       setDistance(args.distance)
       setDuration(args.duration)
@@ -70,12 +68,10 @@ const SpecialMapCtxProvider = ({ children }) => {
   }
 
   const onPlaceSelected = location => {
-    console.log("LOC", location)
     setDestination(location)
     moveTo(location)
     traceRoute()
   }
-  console.log(destination)
   const valueProps = {
     onPlaceSelected,
     SpecialMapRef,
