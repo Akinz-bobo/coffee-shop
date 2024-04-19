@@ -7,7 +7,6 @@ export default function Gallery({ cover_image, image1, image2 }) {
   const img0 = cover_image ? { uri: cover_image } : require("../assets/g1.png")
   const img1 = image1 ? { uri: image1 } : require("../assets/g2.png")
   const img2 = image2 ? { uri: image2 } : require("../assets/g3.png")
-  // console.log({img0,img1,img2})
   return (
     <View style={styles.gallery}>
       <Image source={img0} style={styles.cover_image} />
@@ -24,24 +23,27 @@ const styles = StyleSheet.create({
   gallery: {
     flexDirection: "column",
     gap: 10,
-    height: 300,
+    flex: 1,
   },
   cover_image: {
     borderRadius: 5,
     objectFit: "cover",
-    height: 150,
+    height: 200,
+    width: "95%",
+    marginRight: "auto",
   },
   stack: {
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    flex: 1,
+    width: "95%",
+    justifyContent: "center",
   },
   image: {
     borderRadius: 5,
     objectFit: "cover",
     height: 140,
-    width: 110,
-    // backgroundColor: colors.primary,
+    flex: 1,
+    backgroundColor: colors.primary,
   },
 })

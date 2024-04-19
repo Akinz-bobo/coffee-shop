@@ -6,7 +6,7 @@ import {
   Linking,
   Text,
 } from "react-native"
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Screen from "../components/Screen"
 import Logo from "../components/Logo"
 import AppText from "../components/AppText"
@@ -21,11 +21,31 @@ import { useFavouriteCtx } from "../contexts/FavouritesCtx"
 import TextButton from "../components/TextButton"
 import { useSpecialMapContext } from "../contexts/SpecialMapCtx"
 import { useNavigation } from "@react-navigation/native"
+import axios from "axios"
+import { KEY } from "../../environment"
+import { request } from "../utils/constants"
 
 export default function ShopDetailScreen({ route }) {
-  const shop = route.params
-  const { fav, toggleFavouriteStore } = useFavouritesStore(shop._id)
-  const { getFav } = useFavouriteCtx()
+  const { params } = route
+  console.log(params)
+  const [shop, setShop] = useState(null)
+
+  // get shop details
+
+  // console.log(KEY)
+  useEffect(() => {
+    async function getShopDeTail() {
+      try {
+        const response = await request.get("/shops?id=" + params._id)
+        console.log(response.data)
+        setShop(response.data)
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+
+    getShopDeTail()
+  }, [])
   const { onPlaceSelected } = useSpecialMapContext()
   const navigation = useNavigation()
   const onPressHandler = () => {
@@ -35,6 +55,7 @@ export default function ShopDetailScreen({ route }) {
       longitude: shop.long,
     })
   }
+  if (!shop) return
   return (
     <Screen style={styles.screen}>
       <ScrollView>
@@ -43,8 +64,9 @@ export default function ShopDetailScreen({ route }) {
             style={{
               flexDirection: "row",
               alignItems: "center",
-              width: "90%",
+              width: "95%",
               justifyContent: "space-between",
+              // backgroundColor: "red",
             }}
           >
             <View
@@ -96,7 +118,7 @@ export default function ShopDetailScreen({ route }) {
             image2={shop.images[1]}
           />
           <View style={styles.description}>
-            <AppText title={"Description"} />
+            <AppText title={"Description"} variant="bold" />
             <AppText
               title={shop.description}
               style={{ fontSize: 14, color: colors.light }}

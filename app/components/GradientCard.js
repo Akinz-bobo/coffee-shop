@@ -12,7 +12,7 @@ import { FontAwesome } from "@expo/vector-icons"
 import Ratings from "./Ratings"
 import colors from "../utils/colors"
 import { useFavouritesStore } from "../hooks/localStorage"
-import { useFavouriteCtx } from "../contexts/FavouritesCtx"
+// import { useFavouriteCtx } from "../contexts/FavouritesCtx"
 
 const GradientCard = ({
   image,
@@ -27,7 +27,18 @@ const GradientCard = ({
   style,
   id,
 }) => {
-  const { fav: favorite, toggleFavouriteStore } = useFavouritesStore(id)
+  const { allFavoriteIds, toggleFavouriteStore } = useFavouritesStore()
+  const item = {
+    image,
+    title,
+    decription,
+    distance,
+    stars,
+    totalRatings,
+    icon,
+    origin,
+    _id: id,
+  }
 
   return (
     <TouchableHighlight onPress={onPress}>
@@ -69,16 +80,21 @@ const GradientCard = ({
                 start={{ x: 0.1, y: 0.2 }}
                 style={styles.icon}
               >
-                {/* <TouchableOpacity onPress={async() => {
-                  await toggleFavouriteStore(item);
-                  await getFav()
-                  }}> */}
-                <FontAwesome
-                  name={icon}
-                  size={24}
-                  color={favorite ? colors.primary : colors.white}
-                />
-                {/* </TouchableOpacity> */}
+                <TouchableOpacity
+                  onPress={async () => {
+                    await toggleFavouriteStore(item)
+                  }}
+                >
+                  <FontAwesome
+                    name={icon}
+                    size={24}
+                    color={
+                      allFavoriteIds.includes(item._id)
+                        ? colors.primary
+                        : colors.white
+                    }
+                  />
+                </TouchableOpacity>
               </LinearGradient>
             )}
           </View>

@@ -5,9 +5,7 @@ import colors from "../utils/colors"
 import { AntDesign } from "@expo/vector-icons"
 import { MaterialCommunityIcons } from "@expo/vector-icons"
 import { Ionicons } from "@expo/vector-icons"
-// <FontAwesome6 name="location-dot" size={24} color="black" />
-
-export default function Glass({ratings,origin,title}) {
+export default function Glass({ ratings, origin, title }) {
   return (
     <View style={styles.container}>
       <View>
@@ -19,7 +17,7 @@ export default function Glass({ratings,origin,title}) {
         <View style={{ flexDirection: "row", marginTop: 20, gap: 5 }}>
           <AntDesign name="star" size={24} color={colors.primary} />
           <Text style={{ color: colors.white, fontWeight: 600, fontSize: 18 }}>
-            {ratings||"4.5"}
+            {ratings || "4.5"}
           </Text>
           <Text style={{ color: colors.light }}>(6,879)</Text>
         </View>
@@ -29,7 +27,7 @@ export default function Glass({ratings,origin,title}) {
           <View style={styles.icon}>
             <MaterialCommunityIcons
               name="seed"
-              size={40}
+              size={30}
               color={colors.primary}
             />
             <Text
@@ -39,7 +37,7 @@ export default function Glass({ratings,origin,title}) {
             </Text>
           </View>
           <View style={styles.icon}>
-            <Ionicons name="location-sharp" size={40} color={colors.primary} />
+            <Ionicons name="location-sharp" size={30} color={colors.primary} />
             <Text
               style={{ color: colors.white, fontSize: 16, fontWeight: 600 }}
             >
@@ -47,19 +45,6 @@ export default function Glass({ratings,origin,title}) {
             </Text>
           </View>
         </View>
-        <Text
-          style={{
-            padding: 10,
-            color: colors.white,
-            backgroundColor: colors.medium,
-            marginTop: 10,
-            textAlign: "center",
-            fontSize: 16,
-            borderRadius: 10,
-          }}
-        >
-          {/* Medium Roasted */}
-        </Text>
       </View>
     </View>
   )
@@ -83,8 +68,9 @@ const styles = StyleSheet.create({
   icon: {
     backgroundColor: colors.medium,
     padding: 5,
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: 10,
+    paddingRight: 10,
     borderRadius: 10,
+    alignItems: "center",
   },
 })

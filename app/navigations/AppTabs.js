@@ -4,12 +4,12 @@ import AppNavigator from "./AppNavigator"
 import { FontAwesome } from "@expo/vector-icons"
 import colors from "../utils/colors"
 import ShopNavigator from "./ShopNavation"
-import { useFavouriteCtx } from "../contexts/FavouritesCtx"
+import { useFavouritesStore } from "../hooks/localStorage"
 const Tab = createBottomTabNavigator()
 
 export default AppTabs = ({ shops, origins }) => {
-  // console.log(shops)
-  const { fav } = useFavouriteCtx()
+  const { allFavoriteShops } = useFavouritesStore()
+
   return (
     <Tab.Navigator
       initialRouteName="Feed"
@@ -34,7 +34,7 @@ export default AppTabs = ({ shops, origins }) => {
           } else if (route.name === "Map") {
             iconName = focused ? "map-marker" : "map-marker"
           } else if (route.name === "Favorites") {
-            iconName = focused ? "heart" : "heart-o"
+            iconName = focused ? "heart" : "heart"
           }
           return <FontAwesome name={iconName} size={size} color={color} />
         },
@@ -54,7 +54,10 @@ export default AppTabs = ({ shops, origins }) => {
       <Tab.Screen
         name="Favorites"
         component={FavoritesScreen}
-        options={{ tabBarBadge: fav.length, tabBarShowLabel: false }}
+        options={{
+          tabBarBadge: allFavoriteShops.length,
+          tabBarShowLabel: false,
+        }}
       />
     </Tab.Navigator>
   )

@@ -8,7 +8,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import SpecialMapCtxProvider from "./app/contexts/SpecialMapCtx"
 import navigationTheme from "./app/navigations/navigationTheme"
 import MapCtxProvider from "./app/contexts/MapCtx"
-import { FavCtxWrapper } from "./app/contexts/FavouritesCtx"
+import FavoriteContextProvider from "./app/hooks/localStorage"
 import AppTabs from "./app/navigations/AppTabs"
 import LOTTIE_JSON from "./app/assets/lottie/splash.json"
 import LOTTIE_JSON2 from "./app/assets/lottie/splashscreen.json"
@@ -22,11 +22,11 @@ export default function App() {
         <NavigationContainer theme={navigationTheme}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <MapCtxProvider>
-              <FavCtxWrapper>
+              <FavoriteContextProvider>
                 <SpecialMapCtxProvider>
                   <AppTabs shops={shops} origins={origins} />
                 </SpecialMapCtxProvider>
-              </FavCtxWrapper>
+              </FavoriteContextProvider>
             </MapCtxProvider>
           </GestureHandlerRootView>
         </NavigationContainer>

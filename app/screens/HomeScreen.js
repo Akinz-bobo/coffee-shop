@@ -61,7 +61,11 @@ export default function HomeScreen({ navigation, route }) {
       <ScrollView>
         <View style={styles.screen}>
           <Logo />
-          <AppText title="Find the best coffee for you" variant="bold" />
+          <AppText
+            title="Find the best coffee for you"
+            variant="bold"
+            style={{ fontSize: 35, fontWeight: "bold", maxWidth: "95%" }}
+          />
 
           <AppTextInput
             onChange={processChange}

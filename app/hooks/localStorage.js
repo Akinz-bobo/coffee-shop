@@ -1,31 +1,34 @@
 import AsyncStorage from "@react-native-async-storage/async-storage"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext, createContext } from "react"
 import { favKeyAddon } from "../utils/constants"
-export const useFavouritesStore = id => {
-  const [fav, setFav] = useState(false)
-  const getAllFavourites = async () => {
+
+const FavoriteContext = createContext()
+
+const FavoriteContextProvider = ({ children }) => {
+  const [allFavoriteShops, setAllFavoriteShops] = useState([])
+  const [allFavoriteIds, setAllFavoriteIds] = useState([])
+  const getAllFavouriteShops = async () => {
     try {
-      const allFav = await AsyncStorage.getAllKeys()
-      const allFavKeys = allFav
-        ? allFav.length > 0
-          ? allFav.reduce((prev, curr) => {
-              const currItem = curr.includes(favKeyAddon)
-              if (currItem) {
-                prev.push(curr)
-              }
-              return prev
-            }, [])
-          : []
-        : []
-      const allFavourites =
-        allFavKeys && allFavKeys.length > 0
-          ? (await AsyncStorage.multiGet(allFavKeys)).map(([a, b]) => b)
-          : []
-      return allFavourites
-    } catch (e) {
-      return []
-    }
+      const allFavKeys = await AsyncStorage.getAllKeys()
+      if (allFavKeys) {
+        const allShops = allFavKeys.map(async key => {
+          const isFav = key.includes(favKeyAddon)
+          if (isFav) {
+            const shopItem = await AsyncStorage.getItem(key)
+            return JSON.parse(shopItem)
+          }
+        })
+
+        return Promise.all(allShops)
+      }
+    } catch (error) {}
+    console.log(error)
   }
+  useEffect(() => {
+    getAllFavouriteShops().then(shops => {
+      setAllFavoriteShops(shops)
+    })
+  }, [])
   const storeFavourites = async item => {
     try {
       await AsyncStorage.setItem(item._id + favKeyAddon, JSON.stringify(item))
@@ -35,10 +38,11 @@ export const useFavouritesStore = id => {
   const removeFavourite = async item => {
     try {
       await AsyncStorage.removeItem(item._id + favKeyAddon)
+
       return "removed!"
     } catch (e) {}
   }
-  const isFavourite = async id => {
+  const checkIsfavorite = async id => {
     try {
       const isFav = await AsyncStorage.getItem(id + favKeyAddon)
       return isFav ? true : false
@@ -46,32 +50,48 @@ export const useFavouritesStore = id => {
   }
   const toggleFavouriteStore = async item => {
     try {
-      const isFav = await isFavourite(item._id)
+      const isFav = await checkIsfavorite(item._id)
       if (isFav) {
-        removeFavourite(item)
-        setFav(false)
+        await removeFavourite(item)
+        setAllFavoriteShops(prev => {
+          let KeptSHops = prev.filter(shop => shop._id !== item._id)
+          return KeptSHops
+        })
+        setAllFavoriteIds(prev => prev.filter(id => id !== item._id))
       } else {
         await storeFavourites(item)
-        setFav(true)
+        setAllFavoriteShops(prev => [...prev, item])
+        setAllFavoriteIds(prev => [...prev, item._id])
       }
-      return "Done"
     } catch (e) {}
   }
 
-  useEffect(() => {
-    ;(async () => {
-      if (id) {
-        const isf = await isFavourite(id)
-        setFav(isf)
-      }
-    })()
-  }, [])
+  const values = {
+    toggleFavouriteStore,
+    getAllFavouriteShops,
+    allFavoriteShops,
+    allFavoriteIds,
+  }
+  return (
+    <FavoriteContext.Provider value={values}>
+      {children}
+    </FavoriteContext.Provider>
+  )
+}
+
+export default FavoriteContextProvider
+
+export const useFavouritesStore = () => {
+  const {
+    toggleFavouriteStore,
+    getAllFavouriteShops,
+    allFavoriteShops,
+    allFavoriteIds,
+  } = useContext(FavoriteContext)
   return {
     toggleFavouriteStore,
-    storeFavourites,
-    getAllFavourites,
-    removeFavourite,
-    isFavourite,
-    fav,
+    getAllFavouriteShops,
+    allFavoriteShops,
+    allFavoriteIds,
   }
 }

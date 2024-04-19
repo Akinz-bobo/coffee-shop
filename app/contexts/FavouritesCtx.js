@@ -5,9 +5,11 @@ export const useFavouriteCtx = () => useContext(favCtx)
 export const FavCtxWrapper = ({ children }) => {
   const [fav, setFav] = useState([])
   const { getAllFavourites } = useFavouritesStore()
+
   const getFav = async () => {
     try {
       const allFavs = await getAllFavourites()
+      console.log(allFavs)
       if (allFavs && allFavs.length > 0) {
         setFav(v => allFavs.map(val => JSON.parse(val)))
       }

@@ -22,6 +22,6 @@ export default function AppText({ title, variant = "small", style, color }) {
 const styles = StyleSheet.create({
   text: {
     color: colors.white,
-    fontWeight: "700",
+    // fontWeight: "700",
   },
 })
