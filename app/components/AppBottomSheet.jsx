@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   text: {
     color: "white",
     fontSize: 20,
-    fontWeight: "800",
+    fontWeight: "600",
   },
   container: {
     width: "60%",

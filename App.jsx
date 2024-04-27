@@ -12,6 +12,7 @@ import FavoriteContextProvider from "./app/hooks/localStorage"
 import AppTabs from "./app/navigations/AppTabs"
 import LOTTIE_JSON from "./app/assets/lottie/splash.json"
 import LOTTIE_JSON2 from "./app/assets/lottie/splashscreen.json"
+import LOTTIE_JSON3 from "./app/assets/lottie/b6jJYLrzBW.json"
 import colors from "./app/utils/colors"
 
 export default function App() {
@@ -37,7 +38,7 @@ export default function App() {
               flex: 1,
               backgroundColor: colors.primary,
             }}
-            source={LOTTIE_JSON2}
+            source={LOTTIE_JSON3}
             autoPlay
           />
         </SafeAreaView>

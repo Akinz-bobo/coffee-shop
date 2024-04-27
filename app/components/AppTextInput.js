@@ -20,16 +20,6 @@ export default function AppTextInput({ onChange, searchText, isSearching }) {
         value={searchText}
         onChangeText={onChange}
       />
-      {/* <TextButton
-        title={isSearching ? "Searching..." : "Search"}
-        onPress={searchHandler}
-        style={{
-          borderRadius: 5,
-          width: "40%",
-
-          backgroundColor: colors.primary,
-        }}
-      /> */}
     </View>
   )
 }
@@ -38,7 +28,7 @@ const styles = StyleSheet.create({
   constainer: {
     flex: 1,
     gap: 10,
-    width: "95%",
+    width: "100%",
     alignItems: "center",
   },
   icon: {

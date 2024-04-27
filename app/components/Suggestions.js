@@ -7,18 +7,13 @@ import { useNavigation } from "@react-navigation/native"
 import axios from "axios"
 export default function Suggestions({ shops }) {
   const nav = useNavigation()
-  // console.log(shops)
+
   return (
     <View style={{ paddingTop: 15, paddingRight: 15, gap: 10 }}>
       {shops.map(item => (
         <TouchableOpacity
           onPress={e => {
-            // try {
-            //   const detailedData = await axios.get(
-            //     "https://api.yelp.com/v3/businesses/" + item.id
-            //   )
             nav.navigate("DetailedScreen", { id: item.id })
-            // } catch (e) {}
           }}
           key={item.id}
           style={styles.item}
