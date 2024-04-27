@@ -86,10 +86,11 @@ export default function HomeScreen({ navigation, route }) {
                 <GradientWrapper
                   modalVisible={shopData.length > 0}
                   style={{
-                    paddingLeft: 10,
                     flex: 1,
+                    // height: 800,
                     position: "absolute",
                     zIndex: 10,
+                    width: "100%",
                     backgroundColor: colors.dark,
                   }}
                 >
@@ -99,7 +100,11 @@ export default function HomeScreen({ navigation, route }) {
             )}
             {!shopData.length > 0 && (
               <View>
-                <AppText title={"Origin"} style={{ marginBottom: 16 }} />
+                <AppText
+                  title={"Origin"}
+                  style={{ marginBottom: 16 }}
+                  variant="bold"
+                />
 
                 {origin.length > 0 ? (
                   <FlatList
@@ -126,6 +131,7 @@ export default function HomeScreen({ navigation, route }) {
               <AppText
                 title={"Speciality Coffee"}
                 style={{ marginBottom: 16 }}
+                variant={"bold"}
               />
 
               {shops.length > 0 ? (
@@ -163,7 +169,7 @@ const styles = StyleSheet.create({
     gap: 20,
   },
   container: {
-    paddingLeft: 20,
+    paddingHorizontal: 10,
   },
   text: {
     color: colors.white,

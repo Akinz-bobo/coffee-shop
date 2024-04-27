@@ -5,6 +5,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   View,
+  Dimensions,
 } from "react-native"
 import React, { useEffect, useState } from "react"
 import { LinearGradient } from "expo-linear-gradient"
@@ -14,6 +15,7 @@ import colors from "../utils/colors"
 import { useFavouritesStore } from "../hooks/localStorage"
 // import { useFavouriteCtx } from "../contexts/FavouritesCtx"
 
+const { width, height } = Dimensions.get("window")
 const GradientCard = ({
   image,
   title,
@@ -49,7 +51,9 @@ const GradientCard = ({
         style={[styles.card, style]}
       >
         <View>
-          <Image source={{ uri: image }} style={styles.image} />
+          <View style={styles.image}>
+            <Image source={{ uri: image }} style={styles.image} />
+          </View>
           <Text style={styles.title}>{title}</Text>
           <View style={styles.details}>
             {origin && (
@@ -111,7 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     height: 300,
     width: 185,
-    padding: 20,
+    paddingTop: 15,
     alignItems: "center",
     marginRight: 15,
   },
@@ -132,9 +136,10 @@ const styles = StyleSheet.create({
   },
   image: {
     borderRadius: 15,
-    flex: 1,
-    width: 160,
-    minHeight: 150,
+    // flex: 1,
+    width: Math.floor(width / 2 - 35),
+    overflow: "hidden",
+    minHeight: Math.floor(height / 5 - 8),
   },
 
   title: {

@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
   },
   name: {
     color: "white",
-    fontSize: 22,
-    fontWeight: "800",
+    fontSize: 20,
+    fontWeight: "600",
     marginBottom: 5,
   },
   container: {
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   distance: {
     color: colors.primary,
-    fontSize: 16,
+    fontSize: 14,
   },
   text: {
     color: colors.light,
